@@ -1,0 +1,198 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2016-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2016-03-15 6:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2016-01-10 4:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: MMin               |CurrentValue: 5.0
+RConstant            |ObjectName: CrustalDepth       |CurrentValue: 0
+RConstant            |ObjectName: SubcrustalDepth    |CurrentValue: 5
+RConstant            |ObjectName: FixedPeriod        |CurrentValue: 1.0
+RConstant            |ObjectName: ConstantMagnitude  |CurrentValue: 7.0
+
+
+// -------------------------------------------------------------------------------------------------------
+// FILL LEVEL IN THE STORAGE TANKS
+RContinuousRandomVariable |ObjectName: PercentageFull   |DistributionType: Uniform (a, b)          |Mean: 0.635    |StandardDeviation: 0.2141
+RContinuousRandomVariable |ObjectName: WaterStorageTankFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+RLocation |ObjectName: Area_Source_P1_Location |Latitude: 49.4902348081828 |Longitude: -123.769084408967
+RLocation |ObjectName: Area_Source_P2_Location |Latitude: 49.4902348081828 |Longitude: -123.356115950463
+RLocation |ObjectName: Area_Source_P3_Location |Latitude: 48.900502140467 |Longitude: -123.35307126188
+RLocation |ObjectName: Area_Source_P4_Location |Latitude: 48.9005030448388 |Longitude: -123.770995203436
+RPolygonalAreaSourceModel |ObjectName: EQLocationModel |BoundaryLocationList:  Area_Source_P1_Location ; Area_Source_P2_Location ; Area_Source_P3_Location ; Area_Source_P4_Location ; |Depth: CrustalDepth  |OutputLevel: Minimum
+
+
+RContinuousRandomVariable          |ObjectName: CASRBeta  |DistributionType: Lognormal (zeta, sigma)  |Mean: 1.0  |StandardDeviation:  0.3
+//RBoundedExponentialMagnitudeModel  |ObjectName: theMagnitudeModel  |MinimumMagnitude: MMin  |MaximumMagnitude: ConstantMagnitude  |Beta: CASRBeta  |Occurrence: earthquakeOccurrenceModelResponse |OutputLevel: Minimum
+
+RGivenMagnitudeModel  |ObjectName: theMagnitudeModel  |Magnitude: 6.0  |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: CrustalIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+
+// PGD INTENSITY MODEL
+RPGDIntensityModel  |ObjectName: PGDIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  | PeakGroundAcceleration: CrustalIntensityModelResponse
+
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+
+
+RLocation |ObjectName: EQ_Location |Latitude: 49.304413 |Longitude: -123.156837
+
+RLocation     |ObjectName:  SperlingSubstationLocation  |Latitude:  49.250  |Longitude:  -123.152
+RLocation     |ObjectName:  CamosunSubstationLocation  |Latitude:  49.249  |Longitude:  -123.197
+RLocation     |ObjectName:  GeorgeDickieSubstationLocation  |Latitude:  49.231  |Longitude:  -123.155
+RLocation     |ObjectName:  MountPleasantSubstationLocation  |Latitude:  49.266  |Longitude:  -123.112
+RLocation     |ObjectName:  Kidd1SubstationLocation  |Latitude:  49.206  |Longitude:  -123.117
+RLocation     |ObjectName:  MainwaringSubstationLocation  |Latitude:  49.227  |Longitude:  -123.079
+RLocation     |ObjectName:  DalGrauerSubstationLocation  |Latitude:  49.282  |Longitude:  -123.125
+RLocation     |ObjectName:  MurrinSubstationLocation  |Latitude:  49.280  |Longitude:  -123.100
+RLocation     |ObjectName:  HastingsEastRectifierStationLocation  |Latitude:  49.282  |Longitude:  -123.060
+RLocation     |ObjectName:  GrandviewSubstationLocation  |Latitude:  49.270  |Longitude:  -123.055
+RLocation     |ObjectName:  PetroCanadaSubstationLocation  |Latitude:  49.279  |Longitude:  -122.885
+RLocation     |ObjectName:  BernardSubstationLocation  |Latitude:  49.263  |Longitude:  -122.900
+RLocation     |ObjectName:  HillAvenueTerminalStationLocation  |Latitude:  49.239  |Longitude:  -122.931
+RLocation     |ObjectName:  Royal2SubstationLocation  |Latitude:  49.203  |Longitude:  -122.917
+RLocation     |ObjectName:  BigBendSubstationLocation  |Latitude:  49.200  |Longitude:  -122.994
+RLocation     |ObjectName:  WhalleySubstationLocation  |Latitude:  49.192  |Longitude:  -122.836
+RLocation     |ObjectName:  IngledowSubstationLocation  |Latitude:  49.161  |Longitude:  -122.875
+RLocation     |ObjectName:  FleetwoodSubstationLocation  |Latitude:  49.139  |Longitude:  -122.787
+RLocation     |ObjectName:  Kidd2SubstationLocation  |Latitude:  49.199  |Longitude:  -123.115
+RLocation     |ObjectName:  CapilanoSubstationLocation  |Latitude:  49.336  |Longitude:  -123.108
+RLocation     |ObjectName:  BuntzenLakeDamLocation  |Latitude:  49.375  |Longitude:  -122.868
+RLocation     |ObjectName:  AlouetteLakeLocation  |Latitude:  49.286  |Longitude:  -122.488
+RLocation     |ObjectName:  StaveFallsDamLocation  |Latitude:  49.230  |Longitude:  -122.355
+RLocation     |ObjectName:  RuskinDamLocation  |Latitude:  49.196  |Longitude:  -122.408
+RLocation     |ObjectName:  WahleachFallsDamLocation  |Latitude:  49.250  |Longitude:  -121.605
+RLocation     |ObjectName:  WhatshanDamLocation  |Latitude:  49.916  |Longitude:  -118.117
+RLocation     |ObjectName:  PingstonCreekDamLocation  |Latitude:  50.866  |Longitude:  -118.094
+RLocation     |ObjectName:  RevelstokeDamLocation  |Latitude:  51.052  |Longitude:  -118.195
+RLocation     |ObjectName:  MicaDamDamLocation  |Latitude:  52.077  |Longitude:  -118.565
+RLocation     |ObjectName:  SetonPowerhouseDamLocation  |Latitude:  50.673  |Longitude:  -121.923
+RLocation     |ObjectName:  WaldenNorthDamLocation  |Latitude:  50.657  |Longitude:  -121.982
+RLocation     |ObjectName:  BridgeRiverPowerProjectDamLocation  |Latitude:  50.728  |Longitude:  -122.244
+RLocation     |ObjectName:  LajoieDamLocation  |Latitude:  50.838  |Longitude:  -122.857
+RLocation     |ObjectName:  SooRiverDamLocation  |Latitude:  50.226  |Longitude:  -122.911
+RLocation     |ObjectName:  CheakamusDamLocation  |Latitude:  49.934  |Longitude:  -123.291
+RLocation     |ObjectName:  UpperClownhornDamLocation  |Latitude:  49.852  |Longitude:  -123.452
+RLocation     |ObjectName:  ClownhornDamLocation  |Latitude:  49.711  |Longitude:  -123.535
+RLocation     |ObjectName:  SecheltCreekDamLocation  |Latitude:  49.677  |Longitude:  -123.550
+RLocation     |ObjectName:  FurryCreekDamLocation  |Latitude:  49.582  |Longitude:  -123.206
+RLocation     |ObjectName:  LoisLakeDamLocation  |Latitude:  49.770  |Longitude:  -124.317
+RLocation     |ObjectName:  EastTobaDamLocation  |Latitude:  50.570  |Longitude:  -124.072
+RLocation     |ObjectName:  MontroseCreekLocation  |Latitude:  50.636  |Longitude:  -124.162
+RLocation     |ObjectName:  GordonMShrumLocation  |Latitude:  56.017261  |Longitude:  -122.207636
+RLocation     |ObjectName:  PeaceCanyonLocation  |Latitude:  55.982554  |Longitude:  -121.993282
+
+RLocation     |ObjectName:  WillinstonLocation  |Latitude:  53.851351  |Longitude:  -122.611214
+RLocation     |ObjectName:  KennedyLocation  |Latitude:  55.068715  |Longitude:  -122.78299
+RLocation     |ObjectName:  NicolaLocation  |Latitude:  50.180123  |Longitude:  -120.390264
+RLocation     |ObjectName:  AshtonCreekLocation  |Latitude:  50.561028  |Longitude:  -118.993759
+RLocation     |ObjectName:  KellyLakeLocation  |Latitude:  51.024363  |Longitude:  -121.739809
+RLocation     |ObjectName:  CheekyeSubstationLocation  |Latitude:  49.789805  |Longitude:  -123.160182
+RLocation     |ObjectName:  MeridianLocation  |Latitude:  49.309505  |Longitude:  -122.806240
+RLocation     |ObjectName:  CambieLocation  |Latitude:  49.190933  |Longitude:  -123.062957
+RLocation     |ObjectName:  HornePayneLocation  |Latitude:  49.266550  |Longitude:  -123.016935
+RLocation     |ObjectName:  IngledowLocation  |Latitude:  49.158877  |Longitude:  -122.874002
+RLocation     |ObjectName:  CathedralSquareLocation  |Latitude:  49.282492  |Longitude:  -123.113668
+
+
+// -------------------------------------------------------------------------------------------------------
+// POWER SUPPLY
+RPowerSubstationModel   |ObjectName:  AshtonCreekSubstation  |Location:  AshtonCreekLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  CheekeyeSubstation  |Location:  CheekyeSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  IngledowSubstation  |Location:  IngledowLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  KennedySubstation  |Location:  KennedyLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  KellyLakeSubstation  |Location:  KellyLakeLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MeridianSubstation  |Location:  MeridianLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  NicolaSubstation  |Location:  NicolaLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  WillinstonSubstation  |Location:  WillinstonLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  CambieSubstation  |Location:  CambieLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  CamosunSubstation  |Location:  CamosunSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  CathedralSquareSubstation  |Location:  CathedralSquareLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  HornePayneSubstation  |Location:  HornePayneLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  Kidd1Substation  |Location:  Kidd1SubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MainwaringSubstation  |Location:  MainwaringSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MountPleasantSubstation  |Location:  MountPleasantSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MurrinSubstation  |Location:  MurrinSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  SperlingSubstation  |Location:  SperlingSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+
+
+//RPowerSubstationModel   |ObjectName:  GeorgeDickieSubstation  |Location:  GeorgeDickieSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  DalGrauerSubstation  |Location:  DalGrauerSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  HastingsEastRectifierStation  |Location:  HastingsEastRectifierStationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  GrandviewSubstation  |Location:  GrandviewSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  PetroCanadaSubstation  |Location:  PetroCanadaSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  BernardSubstation  |Location:  BernardSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  HillAvenueTerminalStation  |Location:  HillAvenueTerminalStationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  Royal2Substation  |Location:  Royal2SubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  BigBendSubstation  |Location:  BigBendSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  WhalleySubstation  |Location:  WhalleySubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  FleetwoodSubstation  |Location:  FleetwoodSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  Kidd2Substation  |Location:  Kidd2SubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerSubstationModel   |ObjectName:  CapilanoSubstation  |Location:  CapilanoSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+//RPowerDamModel   |ObjectName:  BuntzenLakeDam  |Location:  BuntzenLakeDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  73  |YearBuilt:  1951  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  AlouetteLake  |Location:  AlouetteLakeLocation  |FacilityType:  SmallUnanchored   |Capacity:  9  |YearBuilt:  1928  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  StaveFallsDam  |Location:  StaveFallsDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  91  |YearBuilt:  1912  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  RuskinDam  |Location:  RuskinDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  105  |YearBuilt:  1930  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  WahleachFallsDam  |Location:  WahleachFallsDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  63  |YearBuilt:  1952  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  WhatshanDam  |Location:  WhatshanDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  54  |YearBuilt:  1972  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  PingstonCreekDam  |Location:  PingstonCreekDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  45  |YearBuilt:  2003  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  RevelstokeDam  |Location:  RevelstokeDamLocation  |FacilityType:  LargeUnanchored   |Capacity:  2480  |YearBuilt:  1984  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  MicaDamDam  |Location:  MicaDamDamLocation  |FacilityType:  LargeUnanchored   |Capacity:  2800  |YearBuilt:  1976  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  SetonPowerhouseDam  |Location:  SetonPowerhouseDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  48  |YearBuilt:  1956  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  WaldenNorthDam  |Location:  WaldenNorthDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  18  |YearBuilt:  1993  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  BridgeRiverPowerProjectDam  |Location:  BridgeRiverPowerProjectDamLocation  |FacilityType:  LargeUnanchored   |Capacity:  478  |YearBuilt:  1948  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  LajoieDam  |Location:  LajoieDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  25  |YearBuilt:  1957  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  SooRiverDam  |Location:  SooRiverDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  14  |YearBuilt:  1994  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  CheakamusDam  |Location:  CheakamusDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  158  |YearBuilt:  1957  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  UpperClownhornDam  |Location:  UpperClownhornDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  11  |YearBuilt:  2009  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  ClownhornDam  |Location:  ClownhornDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  33  |YearBuilt:  1957  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  SecheltCreekDam  |Location:  SecheltCreekDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  17  |YearBuilt:  1997  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  FurryCreekDam  |Location:  FurryCreekDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  11  |YearBuilt:  2004  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  LoisLakeDam  |Location:  LoisLakeDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  37.4  |YearBuilt:  1930  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  EastTobaDam  |Location:  EastTobaDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  123  |YearBuilt:  2010  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+//RPowerDamModel   |ObjectName:  MontroseCreekDam  |Location:  MontroseCreekLocation  |FacilityType:  SmallUnanchored   |Capacity:  73  |YearBuilt:  2010  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  GordonMShrumDam  |Location:  GordonMShrumLocation  |FacilityType:  SmallUnanchored   |Capacity:  73  |YearBuilt:  2010  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  PeaceCanyonDam  |Location:  PeaceCanyonLocation  |FacilityType:  SmallUnanchored   |Capacity:  73  |YearBuilt:  2010  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkOrchestratingModel   |InputParameterList: CamosunSubstationResponse |OutputLevel: Minimum
+RScenarioModel             |ObjectName: ScenarioModel               |InputParameterList:  NetworkOrchestratingModelResponse ;     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 2.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RNetworkSamplingModel |ObjectName: theSamplingModel  |VariableOfInterest: EconomicWelfare |InputParameterList: ScenarioModelResponse |ProbabilityTransformation: myProbTransformation  |MaxSamples: 3  |PlotInterval: 1  |RandomNumberGenerator: myGenerator |OutputLevel: Minimum
+

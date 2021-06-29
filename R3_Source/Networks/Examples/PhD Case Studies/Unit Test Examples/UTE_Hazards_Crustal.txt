@@ -1,0 +1,42 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2016-06-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2016-06-01 3:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2016-06-01 3:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+// Downtown Vancouver
+RLocation |ObjectName: theEpicentreLocation     |Latitude: 49.282258 |Longitude: -123.126486  |ShearWaveVelocity: 400.00
+// CEME Building at UBC
+RLocation |ObjectName: theBuildingLocation      |Latitude: 49.262743 |Longitude: -123.248935  |ShearWaveVelocity: 400.00
+
+
+// -------------------------------------------------------------------------------------------------------
+// MAGNITUDE
+RConstant    |ObjectName: theMagnitude          |CurrentValue: 7.0
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel |ObjectName: CrustalIntensityModel |MagnitudeList: theMagnitude;   |HypocentreList: theEpicentreLocation ; |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+
+// -------------------------------------------------------------------------------------------------------
+// INTENSITY PLOTTERS
+RIntensitySpectrumPlotterModel   |ObjectName: theIntensityPlotter  |IntensityList: CrustalIntensityModelResponse  |BuildingLocation: theBuildingLocation    |OutputLevel: Maximum
+
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RScenarioModel             |ObjectName: ScenarioModel   |InputParameterList:  theIntensityPlotterResponse |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 1  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+

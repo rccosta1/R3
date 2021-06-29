@@ -1,0 +1,72 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2010-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2010-01-01 6:00:00.000
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2010-01-01 4:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: MMin               |CurrentValue: 6.0
+RConstant            |ObjectName: CrustalDepth       |CurrentValue: 5.0
+RConstant            |ObjectName: SubcrustalDepth    |CurrentValue: 5.0
+RConstant            |ObjectName: FixedPeriod        |CurrentValue: 1.0
+
+// -------------------------------------------------------------------------------------------------------
+// FILL LEVEL IN THE STORAGE TANKS
+RContinuousRandomVariable |ObjectName: PercentageFull   |DistributionType: Uniform (a, b)          |Mean: 0.635    |StandardDeviation: 0.2141
+RContinuousRandomVariable |ObjectName: WaterStorageTankFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+// Crustal
+RLocation | ObjectName: CASR_Point01 |Latitude: 49.372187 |Longitude: -123.262056
+RLocation | ObjectName: CASR_Point02 |Latitude: 49.372187 |Longitude: -122.987955
+RLocation | ObjectName: CASR_Point03 |Latitude: 49.191954 |Longitude: -122.987955
+RLocation | ObjectName: CASR_Point04 |Latitude: 49.191954 |Longitude: -123.262056
+RPolygonalAreaSourceModel |ObjectName: CASRLocationModel |BoundaryLocationList:  CASR_Point01 ; CASR_Point02 ; CASR_Point03 ; CASR_Point04   |Depth: CrustalDepth  |OutputLevel: Minimum
+RGivenMagnitudeModel  |ObjectName: theMagnitudeModel  |Magnitude: 6.7896 |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: EarthquakeIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location_Max ;  |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+RLocation |ObjectName: EQ_Location_Mean |Latitude: 49.2466 |Longitude: -123.067
+RLocation |ObjectName: EQ_Location_Max |Latitude: 49.2759 |Longitude: -123.07
+RLocation |ObjectName: VancouverLocation |Latitude: 49.241563 |Longitude: -123.112873
+RLocation |ObjectName: DowntownLocation    |Latitude:  49.28051  |Longitude:  -123.11522
+
+// -------------------------------------------------------------------------------------------------------
+// BUILDING MODELS
+RHazusBuildingModel    |ObjectName: theBuildingDamageModel    |BuildingType: W1  |OccupancyClass: RES1  |CodeDesignLevel:  High  |Magnitude: theMagnitudeModelResponse
+
+// -------------------------------------------------------------------------------------------------------
+// CENSUS INFORMATION
+RCensusInformation     |ObjectName:  DowntownCensusInformation  |Location:  DowntownLocation    |MedianHouseholdIncome:    56868.000  |HouseholdSize:    1.700  |PercentageOfMales:  0.535  |PercentageOfChildren:     0.064  |PercentageOfSeniors:     0.109  |PercentageOfRecentImmigrants:  0.072  |PercentageOfEstablishedImmigrants:  0.309  |AgeDistribution:  0.064 ; 0.019 ; 0.207 ; 0.341 ; 0.260 ; 0.109  |OccupancyRate:  0.993  |PercentageOfRentedBuildings:     0.572  |HouseholdsWithMortgage:  0.665  |PercentageOfHouseholdsWithCars:   0.326  |PercentageUnaffordableDwellings:   0.366  |PercentageUnsafeDwellings:   0.036  |PercentageNotSuitableDwellings:  0.075  |PercentagePreBuildings:  0.068533  |PercentageLowBuildings:  0.192915  |PercentageModerateBuildings:  0.738552  |PercentageHighBuildings:  0.0  |BuildingTypes:  W1   |BuildingNumberPerType:  1000000.0  |BuildingOccupancyClasses: RES1   |BuildingAreas:  900   |BuildingValues:  697128.00  |BuildingDensity:  High  |DistanceToClosestShelter:     1.000  |Municipality:  Vancouver  |BoundaryPointsLatitude:  49.2954 ; 49.2880 ; 49.2846 ; 49.2725 ; 49.2731 ; 49.2757 ; 49.2758 ; 49.2732 ; 49.2708 ; 49.2758 ; 49.2770 ; 49.2844 ; 49.2944 ;   |BoundaryPointsLongitude:  -123.1344 ; -123.1149 ; -123.0994 ; -123.0999 ; -123.1025 ; -123.1035 ; -123.1084 ; -123.1149 ; -123.1270 ; -123.1358 ; -123.1324 ; -123.1212 ; -123.1365 ;
+
+// -------------------------------------------------------------------------------------------------------
+// RESIDENTIAL ZONES
+RHousingRecoveryModel   |ObjectName: DowntownHousingRecoveryModel  |Location:  DowntownLocation  |CensusInformation:  DowntownCensusInformation   |Sa:  EarthquakeIntensityModelResponse   |BuildingDamageModel:  theBuildingDamageModelResponse  |PowerSupplierList:    |WaterSupplierList:     |BuildingInspectorsList:    |EngineeringFirmsList:   |PermittingAuthorityList:   |ContractorList:    |MaterialSupplierList:   |FinancialResourcesSupplierList:    |RepairFunction: LogNormal   |VariableOfInterest:  Baseline  |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkOrchestratingModel   |OutputLevel: Maximum  |InputParameterList:   DowntownHousingRecoveryModelResponse
+RScenarioModel             |ObjectName: ScenarioModel               |InputParameterList:  NetworkOrchestratingModelResponse ;     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 7.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RNetworkSamplingModel |ObjectName: theSamplingModel  |VariableOfInterest: Recovery |InputParameterList: ScenarioModelResponse |ProbabilityTransformation: myProbTransformation  |MaxSamples: 6  |PlotInterval: 1  |RandomNumberGenerator: myGenerator |OutputLevel: Minimum
+

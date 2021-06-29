@@ -1,0 +1,3 @@
+CT,BlockGrp,StrType,Occupancy,Code,Tenure,Mortgage,Value,Income,Size,Race,Children,Elderly
+012000,60750120002,W1,RES1,Pre1940,RenterOccupied,FALSE,470896,139171,2,NonWhite,FALSE,FALSE
+012000,60750120002,W1,RES1,Pre1940,RenterOccupied,FALSE,470896,46270,2,NonWhite,FALSE,FALSE

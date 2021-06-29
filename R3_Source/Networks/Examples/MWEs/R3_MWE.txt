@@ -1,0 +1,49 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2020-01-01 03:00:00.000
+RTime |ObjectName: endTime          |Time: 2030-01-01 06:00:00.000
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: theMagnitude       |CurrentValue: 7.9
+
+// -------------------------------------------------------------------------------------------------------
+// FINANCIAL RESOURCES SUPPLIER
+RAlisjahbana2021FinancingTimeEstimator |ObjectName: theFinancingTimeEstimator |MedianDelayForInsurancePayments: 6.0  |DispersionOfDelayForInsurancePayments: 1.11  |MedianDelayForBankLoans: 15.0   |DispersionOfDelayForBankLoans: 0.68  |MedianDelayForSBALoans: 48.0  |DispersionOfDelayForSBALoans: 0.57  |SBACap: 200000.0  |MedianDelayForCDBGDRGrants: 208.0  |DispersionOfDelayForCDBGDRGrants: 0.0  |CDBGDRCap: 150000.0  |AvailableSavings: 0.5  |SellingOption: SellAfter  |SellingDelay: 180.0
+
+// -------------------------------------------------------------------------------------------------------
+// WORKFORCE SUPPLIER
+RContractorNegotiationModel |ObjectName: WorkforceNegotiation     |Location: SFLocation   |OutputLevel: Minimum
+RSingleFamilyContractorFirmModel  |ObjectName: SFWorkforceAllocation   |Location: SFLocation   |LocalCrews: 50   |DemandRatio: 0.8   |NewAccommodations: 0.5   |Behavior: Greedy  |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+// BUILDING MODELS
+RHazusBuildingModel    |ObjectName: theBuildingDamageModel    |BuildingType: W1  |OccupancyClass: RES1  |CodeDesignLevel:  High  |Magnitude: theMagnitude
+
+// -------------------------------------------------------------------------------------------------------
+// DISPLACEMENT ESTIMATOR
+RAHSPopulationDisplacementEstimator |ObjectName: theDisplacementEstimator
+
+// -------------------------------------------------------------------------------------------------------
+// HOUSEHOLD PORTFOLIOS
+RHouseholdPortfolio    |ObjectName:  CT025500HouseholdPortfolio  |Location:  CT025500Location  |Municipality:  SanFrancisco  |InstantiationMethod:  LogisticRegression    |TotalPopulation:  9192  |PercentageSingleFamilyDwellings: 0.783421  |MedianHouseholdIncome:  106050  |PercentageLowIncome:  0.365873  |PercentageModerateIncome:  0.403668  |PercentageHighIncome:  0.230459  |PercentageMarried: 0.712421  |PercentageMaleHouseholders:  0.611615  |PercentageOfChildren:  0.166449  |PercentageOfSeniors:  0.174717  |PercentageOfRecentImmigrants:  0.06968  |PercentageOfEstablishedImmigrants:  0.06968  |PercentageRecentlyMovedIn:  0.583119  |HouseholdSizeDistribution:  0.149358 ; 0.268257 ; 0.2 ; 0.151927 ; 0.230459  |AgeDistribution:  0.106506 ; 0.059943 ; 0.158072 ; 0.22302 ; 0.277742 ; 0.174717  |HousingCostDistribution: 0.0446110129194376 ; 0.102069989391215 ; 0.0567452574442732 ; 0.0417561368094207 ; 0.0913631829213878 ; 0.125267389370998 ; 0.0103494364274432 ; 0.111705706791154 ; 0.41613188792467   |PercentageOfWhiteHouseholds:  0.401681731288352   |PercentageOfBlackHouseholds:  0.0147333719449326   |PercentageOfAsianHouseholds:  0.429985229905395   |PercentageOfNativeAmericanHouseholds:  0.00620397478838313   |PercentageOfWhiteHispanicHouseholds:  0.134041821178373   |PercentageOfBlackHispanicHouseholds:  0.00249589930629388   |PercentageOfAsianHispanicHouseholds:  0.00698921200553008   |PercentageOfNativeAmericanHispanicHouseholds:  0.00386875958274005  |PercentageWithDisability:  0.048337  |PercentageHigherEducation:  0.248039  |PercentageOfRentedBuildings:  0.38055  |AverageRent:  2715.75414  |PercentageWithMortgage:  0.729265  |PercentageOfHouseholdsWithCars:  0.922569  |PercentageUnaffordableOwnerDwellings:  0.82348623853211  |PercentageUnaffordableRenterDwellings:  0.536161446674839  |PercentageFinancialyStrainedOwnerDwellings:  0.174863  |PercentageFinancialyStrainedRenterDwellings:  0.0395371739840574  |PercentageUnsafeDwellings:  0  |PercentageOvercrowdedOwnerOccupiedDwellings:  0  |PercentageOvercrowdedOwnerOccupiedDwellings:  0.021827  |PercentageDwellingsUsedFoodStamps: 0.015736  |BoundaryPointsLatitude:   37.723 ; 37.7238 ; 37.7239 ; 37.724 ; 37.7246 ; 37.7246 ; 37.7252 ; 37.7259 ; 37.726 ; 37.7264 ; 37.7266 ; 37.7267 ; 37.7273 ; 37.7276 ; 37.7278 ; 37.7282 ; 37.7283 ; 37.7286 ; 37.7288 ; 37.7291 ; 37.7292 ; 37.7294 ; 37.7295 ; 37.7296 ; 37.7298 ; 37.7299 ; 37.7301 ; 37.7302 ; 37.7306 ; 37.7307 ; 37.7311 ; 37.7313 ; 37.7315 ; 37.7316 ; 37.7318 ; 37.732 ; 37.732 ; 37.7323 ; 37.7327 ; 37.733 ; 37.7331 ; 37.7332 ; 37.7339 ; 37.7341 ; 37.7344 ; 37.7345 ; 37.7346 ; 37.7349 ; 37.7351 ; 37.7351 ; 37.735 ; 37.7349 ; 37.7347 ; 37.7345 ; 37.734 ; 37.734 ; 37.7337 ; 37.7337 ; 37.7327 ; 37.732 ; 37.7319 ; 37.7314 ; 37.7312 ; 37.7307 ; 37.7307 ; 37.73 ; 37.73 ; 37.7299 ; 37.7299 ; 37.7292 ; 37.7288 ; 37.7287 ; 37.7282 ; 37.7277 ; 37.7276 ; 37.7273 ; 37.7272 ; 37.7266 ; 37.7262 ; 37.7258 ; 37.7252 ; 37.7247 ; 37.7246 ; 37.724 ; 37.7239 ; 37.7238 ; 37.7237 ; 37.7237 ; 37.7237 ; 37.7237 ; 37.7237 ; 37.7237 ; 37.7236 ; 37.7235 ; 37.7235 ; 37.7234 ; 37.7234 ; 37.7234 ; 37.7232 ; 37.7232 ; 37.7231 ; 37.723 ; 37.723 ; 37.723 ; 37.723 ; 37.723 ; 37.723 ; 37.723   |BoundaryPointsLongitude:   -122.448 ; -122.448 ; -122.448 ; -122.448 ; -122.447 ; -122.447 ; -122.447 ; -122.446 ; -122.446 ; -122.446 ; -122.446 ; -122.446 ; -122.445 ; -122.445 ; -122.444 ; -122.444 ; -122.444 ; -122.443 ; -122.443 ; -122.442 ; -122.442 ; -122.441 ; -122.441 ; -122.441 ; -122.44 ; -122.44 ; -122.439 ; -122.44 ; -122.439 ; -122.438 ; -122.437 ; -122.436 ; -122.436 ; -122.436 ; -122.435 ; -122.435 ; -122.435 ; -122.434 ; -122.433 ; -122.433 ; -122.433 ; -122.432 ; -122.431 ; -122.43 ; -122.43 ; -122.43 ; -122.429 ; -122.429 ; -122.429 ; -122.429 ; -122.428 ; -122.428 ; -122.428 ; -122.427 ; -122.426 ; -122.426 ; -122.426 ; -122.426 ; -122.427 ; -122.428 ; -122.428 ; -122.429 ; -122.429 ; -122.429 ; -122.429 ; -122.43 ; -122.43 ; -122.43 ; -122.43 ; -122.431 ; -122.431 ; -122.431 ; -122.432 ; -122.432 ; -122.432 ; -122.433 ; -122.433 ; -122.433 ; -122.434 ; -122.434 ; -122.434 ; -122.435 ; -122.435 ; -122.435 ; -122.435 ; -122.436 ; -122.437 ; -122.437 ; -122.437 ; -122.438 ; -122.438 ; -122.438 ; -122.439 ; -122.44 ; -122.44 ; -122.441 ; -122.441 ; -122.441 ; -122.442 ; -122.443 ; -122.443 ; -122.444 ; -122.444 ; -122.445 ; -122.447 ; -122.447 ; -122.448 ; -122.448
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+RLocation  |ObjectName: SFLocation       |Latitude: 37.775937  |Longitude:   -122.414724    |ShearWaveVelocity: 300.0
+RLocation  |ObjectName: CT025500Location   |Latitude: 37.787   |Longitude:-122.393   |Sa1Intensity: 2.23368; 0.5904; 1.35642; 1.02031; 2.23368; 0.30836; 1.13786; 0.42313; 1.3406; 0.3478; |Sa0_3Intensity:2.89244; 0.55194; 1.83578; 1.1598; 2.89244; 0.93646; 1.33671; 0.46841; 1.72481; 0.38342; |PGAIntensity:0.33818; 0.27609; 0.72508; 0.496; 1.2837; 0.19827; 0.76622; 0.18381; 0.85898; 0.20862;
+
+// -------------------------------------------------------------------------------------------------------
+// RESIDENTIAL ZONES
+RResidentialMobilityNeighborhoodModel  |ObjectName:  CT025500RecoveryModel  |Location:  CT025500Location  |HouseholdPortfolio:  CT025500HouseholdPortfolio  |BuildingDamageModel:  theBuildingDamageModelResponse  |DisplacementEstimator:  theDisplacementEstimator  |FinancingTimeEstimator: theFinancingTimeEstimator  |ContractorList:  WorkforceNegotiationResponse ; SFWorkforceAllocationResponse   |OutputLevel:  Minimum
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkOrchestratingModel  |MaxTimeGap: 15.0  |OutputLevel: Maximum  |InputParameterList: CT025500RecoveryModelResponse
+RScenarioModel             |ObjectName: ScenarioModel              |InputParameterList:  NetworkOrchestratingModelResponse     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 15.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+RNetworkSamplingModel      |ObjectName: theSamplingModel           |VariableOfInterest: Recovery |SamplingMultiplierFunction: Constant |InputParameterList: ScenarioModelResponse |ProbabilityTransformation: myProbTransformation  |MaxSamples: 1  |PlotInterval: 1  |RandomNumberGenerator: myGenerator |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator

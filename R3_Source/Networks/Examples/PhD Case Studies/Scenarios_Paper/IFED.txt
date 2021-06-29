@@ -1,0 +1,240 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2010-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2010-01-01 6:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2010-01-01 4:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: MMin               |CurrentValue: 6.0
+RConstant            |ObjectName: CrustalDepth       |CurrentValue: 5.0
+RConstant            |ObjectName: SubcrustalDepth    |CurrentValue: 5.0
+RConstant            |ObjectName: FixedPeriod        |CurrentValue: 1.0
+
+// -------------------------------------------------------------------------------------------------------
+// FILL LEVEL IN THE STORAGE TANKS
+RContinuousRandomVariable |ObjectName: PercentageFull   |DistributionType: Uniform (a, b)          |Mean: 0.635    |StandardDeviation: 0.2141
+RContinuousRandomVariable |ObjectName: WaterStorageTankFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+// Crustal
+RLocation | ObjectName: CASR_Point01 |Latitude: 49.372187 |Longitude: -123.262056
+RLocation | ObjectName: CASR_Point02 |Latitude: 49.372187 |Longitude: -122.987955
+RLocation | ObjectName: CASR_Point03 |Latitude: 49.191954 |Longitude: -122.987955
+RLocation | ObjectName: CASR_Point04 |Latitude: 49.191954 |Longitude: -123.262056
+RPolygonalAreaSourceModel |ObjectName: CASRLocationModel |BoundaryLocationList:  CASR_Point01 ; CASR_Point02 ; CASR_Point03 ; CASR_Point04   |Depth: CrustalDepth  |OutputLevel: Minimum
+
+RGivenMagnitudeModel  |ObjectName: theMagnitudeModel  |Magnitude: 7.3 |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+//RConstant |ObjectName: CASRMmax |CurrentValue: 7.7000
+//RContinuousRandomVariable |ObjectName: CASRBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.015 |StandardDeviation: 0.37760
+//RBoundedExponentialMagnitudeModel |ObjectName: theMagnitudeModel |MinimumMagnitude: MMin |MaximumMagnitude: CASRMmax |Beta: CASRBeta |Occurrence: earthquakeOccurrenceModelResponse |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: EarthquakeIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+// PGD INTENSITY MODEL
+RPGDIntensityModel  |ObjectName: PGDIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  | PeakGroundAcceleration: EarthquakeIntensityModelResponse
+
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+RLocation |ObjectName: EQ_Location |Latitude: 49.27266143 |Longitude: -123.409919
+RLocation |ObjectName: VancouverLocation |Latitude: 49.241563 |Longitude: -123.112873
+
+RLocation |ObjectName: ArbutusRidgeLocation    |Latitude:  49.24724  |Longitude:  -123.16038
+RLocation |ObjectName: DunbarSouthlandsLocation    |Latitude:  49.24153  |Longitude:  -123.18494
+RLocation |ObjectName: FairviewLocation    |Latitude:  49.26346  |Longitude:  -123.13032
+RLocation |ObjectName: GrandviewWoodlandLocation    |Latitude:  49.27429  |Longitude:  -123.06641
+RLocation |ObjectName: HastingsSunriseLocation    |Latitude:  49.27569  |Longitude:  -123.03989
+RLocation |ObjectName: KensingtonCedarCottageLocation    |Latitude:  49.24718  |Longitude:  -123.07191
+RLocation |ObjectName: KerrisdaleLocation    |Latitude:  49.22616  |Longitude:  -123.1592
+RLocation |ObjectName: KillarneyLocation    |Latitude:  49.2204  |Longitude:  -123.03746
+RLocation |ObjectName: KitsilanoLocation    |Latitude:  49.26605  |Longitude:  -123.16448
+RLocation |ObjectName: MarpoleLocation    |Latitude:  49.21208  |Longitude:  -123.12723
+RLocation |ObjectName: MountPleasantLocation    |Latitude:  49.26299  |Longitude:  -123.10238
+RLocation |ObjectName: OakridgeLocation    |Latitude:  49.227  |Longitude:  -123.12315
+RLocation |ObjectName: RenfrewCollingwoodLocation    |Latitude:  49.24868  |Longitude:  -123.03955
+RLocation |ObjectName: RileyParkLocation    |Latitude:  49.24607  |Longitude:  -123.10289
+RLocation |ObjectName: ShaughnessyLocation    |Latitude:  49.24696  |Longitude:  -123.13774
+RLocation |ObjectName: SouthCambieLocation    |Latitude:  49.24693  |Longitude:  -123.12175
+RLocation |ObjectName: StrathconaLocation    |Latitude:  49.27522  |Longitude:  -123.08848
+RLocation |ObjectName: SunsetLocation    |Latitude:  49.22178  |Longitude:  -123.09171
+RLocation |ObjectName: VictoriaFraserviewLocation    |Latitude:  49.22139  |Longitude:  -123.06355
+RLocation |ObjectName: WestEndLocation    |Latitude:  49.28525  |Longitude:  -123.13375
+RLocation |ObjectName: WestPointGreyLocation    |Latitude:  49.2671  |Longitude:  -123.2007
+
+RLocation |ObjectName: GordomMShrumDamLocation  |Latitude:  56.017  |Longitude:  -122.208
+RLocation |ObjectName: MicaDamLocation  |Latitude:  52.077  |Longitude:  -118.565
+RLocation |ObjectName: RevelstokeDamLocation  |Latitude:  51.052  |Longitude:  -118.195
+RLocation |ObjectName: PeaceCannyonDamLocation  |Latitude:  55.983  |Longitude:  -121.993
+RLocation |ObjectName: CambieSubstationLocation  |Latitude:  49.191  |Longitude:  -123.063
+RLocation |ObjectName: CamosunSubstationLocation  |Latitude:  49.249  |Longitude:  -123.197
+RLocation |ObjectName: CathedralSquareSubstationLocation  |Latitude:  49.282  |Longitude:  -123.114
+RLocation |ObjectName: HornePayneSubstationLocation  |Latitude:  49.267  |Longitude:  -123.018
+RLocation |ObjectName: Kiddno2SubstationLocation  |Latitude:  49.198  |Longitude:  -123.115
+RLocation |ObjectName: MainwaringSubstationLocation  |Latitude:  49.227  |Longitude:  -123.079
+RLocation |ObjectName: MountPleasantSubstationLocation  |Latitude:  49.266  |Longitude:  -123.112
+RLocation |ObjectName: MurringSubstationLocation  |Latitude:  49.280  |Longitude:  -123.100
+RLocation |ObjectName: SperlingSubstationLocation  |Latitude:  49.250  |Longitude:  -123.152
+RLocation |ObjectName: AshtonCreekSubstationLocation  |Latitude:  50.561  |Longitude:  -118.994
+RLocation |ObjectName: CheekeyeSubstationLocation  |Latitude:  49.790  |Longitude:  -123.160
+RLocation |ObjectName: IngledowSubstationLocation  |Latitude:  49.161  |Longitude:  -122.875
+RLocation |ObjectName: KennedySubstationLocation  |Latitude:  55.071  |Longitude:  -122.788
+RLocation |ObjectName: KellyLakeSubstationLocation  |Latitude:  51.025  |Longitude:  -121.740
+RLocation |ObjectName: MeridianSubstationLocation  |Latitude:  49.310  |Longitude:  -122.807
+RLocation |ObjectName: NicolaSubstationLocation  |Latitude:  50.181  |Longitude:  -120.391
+RLocation |ObjectName: WillistonSubstationLocation  |Latitude:  53.851  |Longitude:  -122.611
+
+RLocation |ObjectName: Road1_Location |Latitude: 49.1702617584604 |Longitude: -123.578182156178
+RLocation |ObjectName: Road2_Location |Latitude: 49.1742663164939 |Longitude: -123.581194523381
+RLocation |ObjectName: Road3_Location |Latitude: 49.1794872545083 |Longitude: -123.584235218518
+RLocation |ObjectName: Road4_Location |Latitude: 49.2023452500588 |Longitude: -123.580983587857
+RLocation |ObjectName: Road5_Location |Latitude: 49.2293298938268 |Longitude: -123.577730614669
+RLocation |ObjectName: Road6_Location |Latitude: 49.236772873189 |Longitude: -123.577735441876
+RLocation |ObjectName: Road7_Location |Latitude: 49.2397527780491 |Longitude: -123.567566238223
+RLocation |ObjectName: Road8_Location |Latitude: 49.232089131984 |Longitude: -123.559477009538
+RLocation |ObjectName: Road9_Location |Latitude: 49.2397527780491 |Longitude: -123.555491899275
+
+RLocation |ObjectName:  OverseasSupplierLocation   |Latitude:   30.85512   |Longitude:   121.869912
+RLocation |ObjectName:  AlbertaSupplierLocation   |Latitude:   51.032861   |Longitude:   -114.059864
+RLocation |ObjectName:  USSupplierLocation   |Latitude:   47.595274   |Longitude:   -122.317758
+RLocation |ObjectName:  SurreyLocation   |Latitude:   49.156951   |Longitude:   -122.938905
+RLocation |ObjectName:  PortOfVancouverLocation   |Latitude:   49.304514   |Longitude:   -123.055034
+
+RLocation |ObjectName: AlexFraserBridgeLocation         |Latitude: 49.159273 |Longitude: -122.942560 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AnnacisChannelEastBridgeLocation |Latitude: 49.175795 |Longitude: -122.955502 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AnnacisChannelWestBridgeLocation |Latitude: 49.174547 |Longitude: -122.958101 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: ArthurLaingBridgeLocation        |Latitude: 49.197978 |Longitude: -123.135993 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: DinsmoreBridgeLocation           |Latitude: 49.178716 |Longitude: -123.148803 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: KnightStreetBridgeLocation       |Latitude: 49.201737 |Longitude: -123.077427 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MasseyTunnelLocation             |Latitude: 49.122216 |Longitude: -123.075997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MorayBridgeLocation              |Latitude: 49.191704 |Longitude: -123.136830 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: No2RdBridgeLocation              |Latitude: 49.175932 |Longitude: -123.157129 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: OakStreetBridgeLocation          |Latitude: 49.199864 |Longitude: -123.125585 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PatulloBridgeLocation            |Latitude: 49.207522 |Longitude: -122.894362 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PortMannBridgeLocation           |Latitude: 49.220069 |Longitude: -122.813288 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: QueensboroughBridgeLocation      |Latitude: 49.196191 |Longitude: -122.946997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: SecondNarrowsBridgeLocation      |Latitude: 49.296479 |Longitude: -123.026460 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: LionsGateBridgeLocation          |Latitude: 49.315292 |Longitude: -123.138606 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PittRiverBridgeLocation          |Latitude:  49.247939 |Longitude: -122.729594  |ShearWaveVelocity: 400.00
+
+
+// -------------------------------------------------------------------------------------------------------
+// WATER SUPPLY
+
+
+// -------------------------------------------------------------------------------------------------------
+// POWER SUPPLY
+
+
+// -------------------------------------------------------------------------------------------------------
+// BRIDGES
+RBridgeModel |ObjectName: AlexFraserBridge         |Location: AlexFraserBridgeLocation          |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 5 |AngleOfSkew: 0 |BridgeLength: 930.5   |SpanWidth: 186.10  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ; |OutputLevel: Minimum
+RBridgeModel |ObjectName: AnnacisChannelEastBridge |Location: AnnacisChannelEastBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: AnnacisChannelWestBridge |Location: AnnacisChannelWestBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: KnightStreetBridge       |Location: KnightStreetBridgeLocation        |AnalysisType: GroundShaking |BridgeType: HWB20 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1450.0  |SpanWidth: 1450.00 |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: MasseyTunnel             |Location: MasseyTunnelLocation              |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: OakStreetBridge          |Location: OakStreetBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB16 |NumberOfSpans: 3 |AngleOfSkew: 0 |BridgeLength: 213.2   |SpanWidth: 71.07   |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: PatulloBridge            |Location: PatulloBridgeLocation             |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1221.0  |SpanWidth: 1221.00 |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: QueensboroughBridge      |Location: QueensboroughBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 924.0   |SpanWidth: 924.00  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: SecondNarrowsBridge      |Location: SecondNarrowsBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1000.0  |SpanWidth: 924.00  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: LionsGateBridge          |Location: LionsGateBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: PortMannBridge           |Location: PortMannBridgeLocation            |AnalysisType: GroundShaking |BridgeType: HWB1 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1400.0   |SpanWidth: 100.0  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName: PittRiverBridge          |Location: PittRiverBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1400.0   |SpanWidth: 100.0  |SaIntensityList: EarthquakeIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+
+
+// -------------------------------------------------------------------------------------------------------
+// INSPECTORS
+RInspectorModel   |ObjectName: theInspectors  |Location: VancouverLocation   |BaselineNumberOfInspectors: 300  |NumberOfDailyWorkHours: 12.0    |MeanInspectionTime: 1.0  |HypocentreList: EQ_Location
+
+
+// -------------------------------------------------------------------------------------------------------
+// FINANCIAL RESOURCES SUPPLIER
+RInsuranceCompanyModel    |ObjectName: InsuranceCompany  |Location: VancouverLocation  |MedianDelayForPayments: 6.0   |DispersionOfDelayForPayments:  1.11  |DelayMultiplierForSmallClaims: 0.75  |DelayMultiplierForLargeClaims: 1.25  |SmallClaimThreshold: 0.25  |LargeClaimThreshold: 0.75
+RPrivateMoneyLenderModel  |ObjectName: theBank           |Location: VancouverLocation  |MedianDelayForPayments: 15.0  |DispersionOfDelayForPayments:  0.68
+RPublicMoneyLenderModel   |ObjectName: theCityHall       |Location: VancouverLocation  |MedianDelayForPayments: 48.0  |DispersionOfDelayForPayments:  0.57  |DelayMultiplierForSmallRequests: 0.75  |SmallClaimThreshold: 20000.0
+
+
+// -------------------------------------------------------------------------------------------------------
+// ENGINEERING FIRMS
+REngineeringFirmModel   |ObjectName: theEngineeringFirm  |Location: VancouverLocation   |BaselineNumberOfSingleFamilyCrews: 60   |BaselineNumberOfMultiFamilyCrews:  780
+
+
+// -------------------------------------------------------------------------------------------------------
+// PERMITTING AUTHORITY
+RPermitAssessorModel   |ObjectName: thePermittingAuthority  |Location: VancouverLocation   |BaselineNumberOfEngineers:  840
+
+
+// -------------------------------------------------------------------------------------------------------
+// WORKFORCE SUPPLIER
+RContractorNegotiationModel |ObjectName: WorkforceNegotiation     |Location: VancouverLocation   |OutputLevel: Minimum
+RSingleFamilyContractorMobilizationModel  |ObjectName: SFWorkforceAllocation       |Location: VancouverLocation   |BaselineNumberOfSingleFamilyCrews: 60  |HourlyWages: 28.31  |OutputLevel: Minimum
+RMultiFamilyContractorMobilizationModel   |ObjectName: MFWorkforceAllocation       |Location: VancouverLocation   |BaselineNumberOfMultiFamilyCrews:  780  |HourlyWages: 28.31  |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// MATERIALS SUPPLIER
+RGenericMaterialsSupplierModel     |ObjectName:  OverseasSupplier   |Location:   OverseasSupplierLocation
+RGenericMaterialsSupplierModel     |ObjectName:  AlbertaSupplier    |Location:   AlbertaSupplierLocation
+RGenericMaterialsSupplierModel     |ObjectName:  USSupplier         |Location:   USSupplierLocation
+
+RRoadwayModel   |ObjectName:  SeattleToSurreyRoad   |Location:   USSupplierLocation   |FromLocation:   USSupplierLocation   |ToLocation:   SurreyLocation   |InputParameterList:   OverseasSupplierResponse   |RoadType:   Hrd2   |BottleneckList:   AlexFraserBridgeResponse
+RRoadwayModel   |ObjectName:  SurreyToVancouverRoad   |Location:   SurreyLocation   |FromLocation:   SurreyLocation   |ToLocation:   VancouverLocation   |InputParameterList:   SeattleToSurreyRoadResponse   |RoadType:   Hrd2   |BottleneckList:   KnightStreetBridgeResponse ; OakStreetBridgeResponse ; QueensboroughBridgeResponse ; AnnacisChannelWestBridgeResponse ; AnnacisChannelEastBridgeResponse
+RRoadwayModel   |ObjectName:  SeattleToVancouverRoad   |Location:   USSupplierLocation   |FromLocation:   USSupplierLocation   |ToLocation:   VancouverLocation   |InputParameterList:   USSupplierResponse  |RoadType:   Hrd2   |BottleneckList:   PatulloBridgeResponse ; PortMannBridgeResponse
+
+RRoadwayModel   |ObjectName:  AltaToVancouverRailway   |Location:   AlbertaSupplierLocation   |FromLocation:   AlbertaSupplierLocation   |ToLocation:   VancouverLocation   |InputParameterList:   AlbertaSupplierResponse   |RoadType:   Hrd2   |BottleneckList:   PittRiverBridgeResponse
+
+RPortModel |ObjectName: PortOfVancouver    |Location: PortOfVancouverLocation   |WFStructureType: WFStructure  |CranesType: Anchored  |FuelFacilityType: AnchoredNoBackUpPower |FuelSupplierList:   OverseasSupplierResponse |IntensityList: EarthquakeIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RRoadwayModel   |ObjectName:  PortOfVancouverToVancouverRoad   |Location:   PortOfVancouverLocation   |FromLocation:   OverseasSupplierLocation   |ToLocation:   VancouverLocation   |InputParameterList:   PortOfVancouverResponse   |RoadType:   Hrd2   |BottleneckList:   LionsGateBridgeResponse ; SecondNarrowsBridgeResponse
+
+RHardwareStoreModel     |ObjectName: HomeDepot                 |Location: VancouverLocation   |NumberOfDailyDeliveries: 2000000  |StockOfWoodProducts: 1000000000.0    |MaterialsSupplierList: SurreyToVancouverRoadResponse ;  SeattleToVancouverRoadResponse ;  AltaToVancouverRailwayResponse  ; PortOfVancouverToVancouverRoadResponse  |OutputLevel: Minimum
+RRoadwayModel           |ObjectName: Road1                     |Location:  Road1_Location   |FromLocation:  VancouverLocation |ToLocation:  VancouverLocation |InputParameterList: HomeDepotResponse |RoadType:Hrd2   |BottleneckList:
+
+RConcretePlantModel  |ObjectName: theConcretePlant      |Location: VancouverLocation  |NumberOfDailyDeliveries: 2000000 |ConcreteStock: 10000000000.0   |SupplierList:  SurreyToVancouverRoadResponse ;  SeattleToVancouverRoadResponse ;  AltaToVancouverRailwayResponse  ; PortOfVancouverToVancouverRoadResponse
+
+RRoadwayModel        |ObjectName: Road2                 |Location:  Road1_Location   |FromLocation:  VancouverLocation |ToLocation:  VancouverLocation |InputParameterList: theConcretePlantResponse |RoadType:Hrd2   |BottleneckList:
+
+
+// -------------------------------------------------------------------------------------------------------
+// BUILDING MODELS
+RHazusBuildingModel    |ObjectName: theBuildingDamageModel    |BuildingType: W1  |OccupancyClass: RES1  |CodeDesignLevel:  High  |Magnitude: theMagnitudeModelResponse
+
+// -------------------------------------------------------------------------------------------------------
+// CENSUS INFORMATION
+//RCensusInformation     |ObjectName:  KitsilanoCensusInformation  |Location:  KitsilanoLocation    |MedianHouseholdIncome:    56868.000                               |HouseholdSize:    1.700  |PercentageOfMales:  0.535  |PercentageOfChildren:     0.064  |PercentageOfSeniors:     0.109  |PercentageOfRecentImmigrants:  0.072  |PercentageOfEstablishedImmigrants:  0.309  |AgeDistribution:  0.064 ; 0.019 ; 0.207 ; 0.341 ; 0.260 ; 0.109  |OccupancyRate:  0.993  |PercentageOfRentedBuildings:     0.572  |HouseholdsWithMortgage:  0.665  |PercentageOfHouseholdsWithCars:   0.326  |PercentageUnaffordableDwellings:   0.366  |PercentageUnsafeDwellings:   0.036  |PercentageNotSuitableDwellings:  0.075  |PercentagePreBuildings:  0.50  |PercentageLowBuildings:  0.50  |PercentageModerateBuildings:  0.0  |PercentageHighBuildings:  0.899  |BuildingTypes:  C2L  |BuildingNumberPerType:  3000  |BuildingOccupancyClasses:  RES3   |BuildingAreas:  900   |BuildingValues:  1000000.00   |BuildingDensity:  High  |DistanceToClosestShelter:     1.000  |Municipality:  Vancouver  |BoundaryPointsLatitude:  49.2954 ; 49.2880 ; 49.2846 ; 49.2725 ; 49.2731 ; 49.2757 ; 49.2758 ; 49.2732 ; 49.2708 ; 49.2758 ; 49.2770 ; 49.2844 ; 49.2944 ;   |BoundaryPointsLongitude:  -123.1344 ; -123.1149 ; -123.0994 ; -123.0999 ; -123.1025 ; -123.1035 ; -123.1084 ; -123.1149 ; -123.1270 ; -123.1358 ; -123.1324 ; -123.1212 ; -123.1365 ;
+RCensusInformation     |ObjectName:  KitsilanoCensusInformation  |Location:  KitsilanoLocation    |MedianHouseholdIncome:    56868.000                               |HouseholdSize:    1.700  |PercentageOfMales:  0.535  |PercentageOfChildren:     0.064  |PercentageOfSeniors:     0.109  |PercentageOfRecentImmigrants:  0.072  |PercentageOfEstablishedImmigrants:  0.309  |AgeDistribution:  0.064 ; 0.019 ; 0.207 ; 0.341 ; 0.260 ; 0.109  |OccupancyRate:  0.993  |PercentageOfRentedBuildings:     0.572  |HouseholdsWithMortgage:  0.665  |PercentageOfHouseholdsWithCars:   0.326  |PercentageUnaffordableDwellings:   0.366  |PercentageUnsafeDwellings:   0.036  |PercentageNotSuitableDwellings:  0.075  |PercentagePreBuildings:  0.00  |PercentageLowBuildings:  0.00  |PercentageModerateBuildings:  1.0  |PercentageHighBuildings:  0.899  |BuildingTypes:  C2L  |BuildingNumberPerType:  3000  |BuildingOccupancyClasses:  RES3   |BuildingAreas:  900   |BuildingValues:  1000000.00   |BuildingDensity:  High  |DistanceToClosestShelter:     1.000  |Municipality:  Vancouver  |BoundaryPointsLatitude:  49.2954 ; 49.2880 ; 49.2846 ; 49.2725 ; 49.2731 ; 49.2757 ; 49.2758 ; 49.2732 ; 49.2708 ; 49.2758 ; 49.2770 ; 49.2844 ; 49.2944 ;   |BoundaryPointsLongitude:  -123.1344 ; -123.1149 ; -123.0994 ; -123.0999 ; -123.1025 ; -123.1035 ; -123.1084 ; -123.1149 ; -123.1270 ; -123.1358 ; -123.1324 ; -123.1212 ; -123.1365 ;
+
+// -------------------------------------------------------------------------------------------------------
+// RESIDENTIAL ZONES
+RHousingRecoveryModel   |ObjectName: KitsilanoHousingRecoveryModel  |Location:  KitsilanoLocation  |CensusInformation:  KitsilanoCensusInformation   |Sa:  EarthquakeIntensityModelResponse   |BuildingDamageModel:  theBuildingDamageModelResponse  |PowerSupplierList:    |WaterSupplierList:     |BuildingInspectorsList:  theInspectorsResponse  |EngineeringFirmsList: theEngineeringFirmResponse  |PermittingAuthorityList:  thePermittingAuthorityResponse  |ContractorList:  WorkforceNegotiationResponse ; SFWorkforceAllocationResponse ; MFWorkforceAllocationResponse  |MaterialSupplierList:  Road1Response ; Road2Response  |FinancialResourcesSupplierList:  InsuranceCompanyResponse ; theCityHallResponse ; theBankResponse  |RepairFunction: LogNormal   |VariableOfInterest:  Baseline  |OutputLevel: Minimum
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkOrchestratingModel   |OutputLevel: Minimum  |InputParameterList:   KitsilanoHousingRecoveryModelResponse
+RScenarioModel             |ObjectName: ScenarioModel               |InputParameterList:  NetworkOrchestratingModelResponse ;     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 7.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RNetworkSamplingModel |ObjectName: theSamplingModel  |VariableOfInterest: Recovery |InputParameterList: ScenarioModelResponse |ProbabilityTransformation: myProbTransformation  |MaxSamples: 100  |PlotInterval: 1  |RandomNumberGenerator: myGenerator |OutputLevel: Minimum
+

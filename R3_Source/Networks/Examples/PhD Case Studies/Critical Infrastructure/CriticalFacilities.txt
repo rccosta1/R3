@@ -1,0 +1,363 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2016-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2016-03-15 6:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2016-01-10 4:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: MMin               |CurrentValue: 5.0
+RConstant            |ObjectName: CrustalDepth       |CurrentValue: 0
+RConstant            |ObjectName: SubcrustalDepth    |CurrentValue: 5
+RConstant            |ObjectName: FixedPeriod        |CurrentValue: 1.0
+RConstant            |ObjectName: ConstantMagnitude  |CurrentValue: 7.0
+
+
+// -------------------------------------------------------------------------------------------------------
+// FILL LEVEL IN THE STORAGE TANKS
+RContinuousRandomVariable |ObjectName: PercentageFull   |DistributionType: Uniform (a, b)          |Mean: 0.635    |StandardDeviation: 0.2141
+RContinuousRandomVariable |ObjectName: WaterStorageTankFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+RContinuousRandomVariable |ObjectName: GenericFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+RLocation     |ObjectName: Area_Source_P1_Location |Latitude: 49.4902348081828 |Longitude: -123.769084408967
+RLocation     |ObjectName: Area_Source_P2_Location |Latitude: 49.4902348081828 |Longitude: -123.356115950463
+RLocation     |ObjectName: Area_Source_P3_Location |Latitude: 48.900502140467 |Longitude: -123.35307126188
+RLocation     |ObjectName: Area_Source_P4_Location |Latitude: 48.9005030448388 |Longitude: -123.770995203436
+RPolygonalAreaSourceModel |ObjectName: EQLocationModel |BoundaryLocationList:  Area_Source_P1_Location ; Area_Source_P2_Location ; Area_Source_P3_Location ; Area_Source_P4_Location ; |Depth: CrustalDepth  |OutputLevel: Minimum
+
+
+RContinuousRandomVariable          |ObjectName: CASRBeta  |DistributionType: Lognormal (zeta, sigma)  |Mean: 1.0  |StandardDeviation:  0.3
+//RBoundedExponentialMagnitudeModel  |ObjectName: theMagnitudeModel  |MinimumMagnitude: MMin  |MaximumMagnitude: ConstantMagnitude  |Beta: CASRBeta  |Occurrence: earthquakeOccurrenceModelResponse |OutputLevel: Minimum
+
+RGivenMagnitudeModel  |ObjectName: theMagnitudeModel  |Magnitude: 6.0  |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: CrustalIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+
+// PGD INTENSITY MODEL
+RPGDIntensityModel  |ObjectName: PGDIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  | PeakGroundAcceleration: CrustalIntensityModelResponse
+
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+
+RLocation     |ObjectName: EQ_Location |Latitude: 49.304413 |Longitude: -123.156837
+RLocation     |ObjectName:  ClevelandDamLocation  |Latitude:  49.360  |Longitude:  -123.111
+RLocation     |ObjectName:  SeymourFallsDamLocation  |Latitude:  49.440  |Longitude:  -122.969
+RLocation     |ObjectName:  CoquitlamDamLocation  |Latitude:  49.355  |Longitude:  -122.775
+RLocation     |ObjectName:  LittleMountainReservoirLocation  |Latitude:  49.241  |Longitude:  -123.113
+RLocation     |ObjectName:  KerslandReservoirLocation  |Latitude:  49.238  |Longitude:  -123.112
+RLocation     |ObjectName:  GreenwoodReservoirLocation  |Latitude:  49.329  |Longitude:  -123.060
+RLocation     |ObjectName:  VancouverHeightsReservoirLocation  |Latitude:  49.289  |Longitude:  -123.019
+RLocation     |ObjectName:  CentralParkReservoirLocation  |Latitude:  49.226  |Longitude:  -123.013
+RLocation     |ObjectName:  BurnabyMountainReservoirLocation  |Latitude:  49.265  |Longitude:  -122.925
+RLocation     |ObjectName:  WestburncoReservoirLocation  |Latitude:  49.229  |Longitude:  -122.907
+RLocation     |ObjectName:  CapeHornReservoirLocation  |Latitude:  49.242  |Longitude:  -122.818
+RLocation     |ObjectName:  BurnabyTankReservoirLocation  |Latitude:  49.269  |Longitude:  -122.912
+RLocation     |ObjectName:  WhalleyReservoirLocation  |Latitude:  49.193  |Longitude:  -122.817
+RLocation     |ObjectName:  KennedyParkReservoirLocation  |Latitude:  49.168  |Longitude:  -122.886
+RLocation     |ObjectName:  HellingsTankReservoirLocation  |Latitude:  49.159  |Longitude:  -122.903
+RLocation     |ObjectName:  NewtonReservoirLocation  |Latitude:  49.117  |Longitude:  -122.871
+RLocation     |ObjectName:  PebbleHillParkReservoirLocation  |Latitude:  49.009  |Longitude:  -123.082
+RLocation     |ObjectName:  SunnysideReservoirLocation  |Latitude:  49.041  |Longitude:  -122.819
+RLocation     |ObjectName:  GrandviewReservoirLocation  |Latitude:  49.046  |Longitude:  -122.761
+RLocation     |ObjectName:  ClaytonTankReservoirLocation  |Latitude:  49.133  |Longitude:  -122.695
+RLocation     |ObjectName:  MapleRidgeReservorLocation  |Latitude:  49.224  |Longitude:  -122.540
+RLocation     |ObjectName:  GreenwoodPumpStationLocation  |Latitude:  49.348  |Longitude:  -123.014
+RLocation     |ObjectName:  CapilanoPumpStationLocation  |Latitude:  49.358  |Longitude:  -123.112
+RLocation     |ObjectName:  SasmatPumStationLocation  |Latitude:  49.258  |Longitude:  -123.209
+RLocation     |ObjectName:  LittleMountainPumpStationLocation  |Latitude:  49.241  |Longitude:  -123.114
+RLocation     |ObjectName:  KerslandPumpStationLocation  |Latitude:  49.239  |Longitude:  -123.115
+RLocation     |ObjectName:  VancouverHeightsPumpStationLocation  |Latitude:  49.289  |Longitude:  -123.019
+RLocation     |ObjectName:  CentralParkPumpStationLocation  |Latitude:  49.226  |Longitude:  -123.013
+RLocation     |ObjectName:  BurnabyMountainPumpStationLocation  |Latitude:  49.265  |Longitude:  -122.925
+RLocation     |ObjectName:  WestburncoPumpingStationLocation  |Latitude:  49.229  |Longitude:  -122.907
+RLocation     |ObjectName:  CapeHornPumpStationLocation  |Latitude:  49.242  |Longitude:  -122.818
+RLocation     |ObjectName:  HellingsPumpStationLocation  |Latitude:  49.159  |Longitude:  -122.903
+RLocation     |ObjectName:  NewtonBoosterPumpStationLocation  |Latitude:  49.117  |Longitude:  -122.871
+RLocation     |ObjectName:  PebbleHillParkPumpStationLocation  |Latitude:  49.009  |Longitude:  -123.082
+RLocation     |ObjectName:  GrandviewPumpStationLocation  |Latitude:  49.047  |Longitude:  -122.715
+RLocation     |ObjectName:  MahonPumpStationLocation  |Latitude:  49.326  |Longitude:  -123.080
+RLocation     |ObjectName:  SeymourCapilanoFiltrationPlantLocation  |Latitude:  49.349  |Longitude:  -123.013
+RLocation     |ObjectName:  StanleyParkRechlorificationStationLocation  |Latitude:  49.294  |Longitude:  -123.138
+RLocation     |ObjectName:  CoquitlamTreatmentPlantLocation  |Latitude:  49.340  |Longitude:  -122.773
+RLocation     |ObjectName:  LittleMountainTreatmentFacilityLocation  |Latitude:  49.240  |Longitude:  -123.115
+RLocation     |ObjectName:  VancouverHeightsTreatmentFacilityLocation  |Latitude:  49.287  |Longitude:  -123.024
+RLocation     |ObjectName:  KerslandTreatmentFacilityLocation  |Latitude:  49.239  |Longitude:  -123.115
+RLocation     |ObjectName:  CapeHornTreatmentFacilityLocation  |Latitude:  49.242  |Longitude:  -122.817
+RLocation     |ObjectName:  HaneyMain3TreatmentFacilityLocation  |Latitude:  49.247  |Longitude:  -122.726
+RLocation     |ObjectName:  NewtonBoosterTreatmentFacilityLocation  |Latitude:  49.117  |Longitude:  -122.871
+RLocation     |ObjectName:  SperlingSubstationLocation  |Latitude:  49.250  |Longitude:  -123.152
+RLocation     |ObjectName:  CamosunSubstationLocation  |Latitude:  49.249  |Longitude:  -123.197
+RLocation     |ObjectName:  GeorgeDickieSubstationLocation  |Latitude:  49.231  |Longitude:  -123.155
+RLocation     |ObjectName:  MountPleasantSubstationLocation  |Latitude:  49.266  |Longitude:  -123.112
+RLocation     |ObjectName:  Kidd1SubstationLocation  |Latitude:  49.206  |Longitude:  -123.117
+RLocation     |ObjectName:  MainwaringSubstationLocation  |Latitude:  49.227  |Longitude:  -123.079
+RLocation     |ObjectName:  DalGrauerSubstationLocation  |Latitude:  49.282  |Longitude:  -123.125
+RLocation     |ObjectName:  MurrinSubstationLocation  |Latitude:  49.280  |Longitude:  -123.100
+RLocation     |ObjectName:  HastingsEastRectifierStationLocation  |Latitude:  49.282  |Longitude:  -123.060
+RLocation     |ObjectName:  GrandviewSubstationLocation  |Latitude:  49.270  |Longitude:  -123.055
+RLocation     |ObjectName:  PetroCanadaSubstationLocation  |Latitude:  49.279  |Longitude:  -122.885
+RLocation     |ObjectName:  BernardSubstationLocation  |Latitude:  49.263  |Longitude:  -122.900
+RLocation     |ObjectName:  HillAvenueTerminalStationLocation  |Latitude:  49.239  |Longitude:  -122.931
+RLocation     |ObjectName:  Royal2SubstationLocation  |Latitude:  49.203  |Longitude:  -122.917
+RLocation     |ObjectName:  BigBendSubstationLocation  |Latitude:  49.200  |Longitude:  -122.994
+RLocation     |ObjectName:  WhalleySubstationLocation  |Latitude:  49.192  |Longitude:  -122.836
+RLocation     |ObjectName:  IngledowSubstationLocation  |Latitude:  49.161  |Longitude:  -122.875
+RLocation     |ObjectName:  FleetwoodSubstationLocation  |Latitude:  49.139  |Longitude:  -122.787
+RLocation     |ObjectName:  Kidd2SubstationLocation  |Latitude:  49.199  |Longitude:  -123.115
+RLocation     |ObjectName:  CapilanoSubstationLocation  |Latitude:  49.336  |Longitude:  -123.108
+RLocation     |ObjectName:  BuntzenLakeDamLocation  |Latitude:  49.375  |Longitude:  -122.868
+RLocation     |ObjectName:  AlouetteLakeLocation  |Latitude:  49.286  |Longitude:  -122.488
+RLocation     |ObjectName:  StaveFallsDamLocation  |Latitude:  49.230  |Longitude:  -122.355
+RLocation     |ObjectName:  RuskinDamLocation  |Latitude:  49.196  |Longitude:  -122.408
+RLocation     |ObjectName:  WahleachFallsDamLocation  |Latitude:  49.250  |Longitude:  -121.605
+RLocation     |ObjectName:  WhatshanDamLocation  |Latitude:  49.916  |Longitude:  -118.117
+RLocation     |ObjectName:  PingstonCreekDamLocation  |Latitude:  50.866  |Longitude:  -118.094
+RLocation     |ObjectName:  RevelstokeDamLocation  |Latitude:  51.052  |Longitude:  -118.195
+RLocation     |ObjectName:  MicaDamDamLocation  |Latitude:  52.077  |Longitude:  -118.565
+RLocation     |ObjectName:  SetonPowerhouseDamLocation  |Latitude:  50.673  |Longitude:  -121.923
+RLocation     |ObjectName:  WaldenNorthDamLocation  |Latitude:  50.657  |Longitude:  -121.982
+RLocation     |ObjectName:  BridgeRiverPowerProjectDamLocation  |Latitude:  50.728  |Longitude:  -122.244
+RLocation     |ObjectName:  LajoieDamLocation  |Latitude:  50.838  |Longitude:  -122.857
+RLocation     |ObjectName:  SooRiverDamLocation  |Latitude:  50.226  |Longitude:  -122.911
+RLocation     |ObjectName:  CheakamusDamLocation  |Latitude:  49.934  |Longitude:  -123.291
+RLocation     |ObjectName:  UpperClownhornDamLocation  |Latitude:  49.852  |Longitude:  -123.452
+RLocation     |ObjectName:  ClownhornDamLocation  |Latitude:  49.711  |Longitude:  -123.535
+RLocation     |ObjectName:  SecheltCreekDamLocation  |Latitude:  49.677  |Longitude:  -123.550
+RLocation     |ObjectName:  FurryCreekDamLocation  |Latitude:  49.582  |Longitude:  -123.206
+RLocation     |ObjectName:  LoisLakeDamLocation  |Latitude:  49.770  |Longitude:  -124.317
+RLocation     |ObjectName:  EastTobaDamLocation  |Latitude:  50.570  |Longitude:  -124.072
+RLocation     |ObjectName:  MontroseCreekLocation  |Latitude:  50.636  |Longitude:  -124.162
+RLocation     |ObjectName:  BurnabyEssoLocation  |Latitude: 49.301006 |Longitude: -122.881862 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  BurnabyChevronLocation  |Latitude: 49.283735 |Longitude: -123.002872 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  BurnabyShellLocation  |Latitude: 49.260704 |Longitude: -122.927543 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  BurnabySuncorLocation  |Latitude: 49.278933 |Longitude: -122.880849 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  BurnabyWestridgeLocation  |Latitude: 49.286072 |Longitude: -122.954368 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  BurnabyTMPLTerminalLocation  |Latitude: 49.266605 |Longitude: -122.931305 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  AnacortesShellLocation  |Latitude: 48.465674 |Longitude: -122.559910 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  AnacortesTesoroLocation  |Latitude: 48.496630 |Longitude: -122.566559 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  CobbleHillChevronTankFarmLocation  |Latitude: 48.694706 |Longitude: -123.545216 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  NanaimoEssoTankFarmLocation  |Latitude: 49.192507 |Longitude: -123.949965 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  NanaimoSuncorTankFarmLocation  |Latitude: 49.186397 |Longitude: -123.950093 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  ChemainusShellTankFarmLocation  |Latitude: 48.926257 |Longitude: -123.705160 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  PowellRiverTankFarmLocation  |Latitude: 49.835707 |Longitude: -124.528626 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  HartleyBayTankFarmLocation  |Latitude: 53.425685 |Longitude: -129.251227 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  BellaCoolaTankFarmLocation  |Latitude: 52.373865 |Longitude: -126.752583 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  YVRTankFarmLocation   |Latitude: 49.196611 |Longitude: -123.161371 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  AlexFraserBridgeLocation   |Latitude: 49.159273 |Longitude: -122.942560 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  AnnacisChannelEastBridgeLocation |Latitude: 49.175795 |Longitude: -122.955502 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  AnnacisChannelWestBridgeLocation |Latitude: 49.174547 |Longitude: -122.958101 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  ArthurLaingBridgeLocation  |Latitude: 49.197978 |Longitude: -123.135993 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  DinsmoreBridgeLocation  |Latitude: 49.178716 |Longitude: -123.148803 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  KnightStreetBridgeLocation  |Latitude: 49.201737 |Longitude: -123.077427 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  MasseyTunnelLocation  |Latitude: 49.122216 |Longitude: -123.075997 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  MorayBridgeLocation  |Latitude: 49.191704 |Longitude: -123.136830 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  No2RdBridgeLocation  |Latitude: 49.175932 |Longitude: -123.157129 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  OakStreetBridgeLocation  |Latitude: 49.199864 |Longitude: -123.125585 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  PatulloBridgeLocation  |Latitude: 49.207522 |Longitude: -122.894362 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  PortMannBridgeLocation  |Latitude: 49.220069 |Longitude: -122.813288 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  QueensboroughBridgeLocation  |Latitude: 49.196191 |Longitude: -122.946997 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  SecondNarrowsBridgeLocation  |Latitude: 49.296479 |Longitude: -123.026460 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName:  LionsGateBridgeLocation  |Latitude: 49.315292 |Longitude: -123.138606 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: AnacortesPortLocation           |Latitude: 48.521696 |Longitude: -122.612732 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: BurnabyChevronPortLocation      |Latitude: 49.289735 |Longitude: -123.002872 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: BurnabyEssoPortLocation         |Latitude: 49.301006 |Longitude: -122.888862 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: BurnabyShellPortLocation        |Latitude: 49.290704 |Longitude: -122.927543 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: BurnabySuncorPortLocation       |Latitude: 49.288933 |Longitude: -122.880849 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: ChemainusPortLocation           |Latitude: 48.928496 |Longitude: -123.704482 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: CobbleHillPortLocation          |Latitude: 48.696939 |Longitude: -123.540638 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: MitchellIslandPortLocation      |Latitude: 49.200830 |Longitude: -123.090998 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: NanaimoDepartureBayPortLocation |Latitude: 49.166667 |Longitude: -123.933056 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: PowellRiverPortLocation         |Latitude: 49.866667 |Longitude: -124.549722 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: HartleyBayPortLocation          |Latitude: 53.424485 |Longitude: -129.251227 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: BellaCoolaPortLocation          |Latitude: 52.372665 |Longitude: -126.752583 |ShearWaveVelocity: 400.00
+RLocation     |ObjectName: BurnabyWestridgePortLocation    |Latitude: 49.289072 |Longitude: -122.954368 |ShearWaveVelocity: 400.00
+
+
+// -------------------------------------------------------------------------------------------------------
+// WATER SUPPLY
+RWaterReservoirModel   |ObjectName:  ClevelandDam  |Location:  ClevelandDamLocation  |FacilityType:  0  |IntensityList:    |OutputLevel:  Minimum
+RWaterReservoirModel   |ObjectName:  SeymourFallsDam  |Location:  SeymourFallsDamLocation  |FacilityType:  0  |IntensityList:    |OutputLevel:  Minimum
+RWaterReservoirModel   |ObjectName:  CoquitlamDam  |Location:  CoquitlamDamLocation  |FacilityType:  0  |IntensityList:    |OutputLevel:  Minimum
+
+RWaterStorageTankModel   |ObjectName:  LittleMountainReservoir  |Location:  LittleMountainReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  KerslandReservoir  |Location:  KerslandReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  GreenwoodReservoir  |Location:  GreenwoodReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  VancouverHeightsReservoir  |Location:  VancouverHeightsReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  CentralParkReservoir  |Location:  CentralParkReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  BurnabyMountainReservoir  |Location:  BurnabyMountainReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  WestburncoReservoir  |Location:  WestburncoReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  CapeHornReservoir  |Location:  CapeHornReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  BurnabyTankReservoir  |Location:  BurnabyTankReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  WhalleyReservoir  |Location:  WhalleyReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  KennedyParkReservoir  |Location:  KennedyParkReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  HellingsTankReservoir  |Location:  HellingsTankReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  NewtonReservoir  |Location:  NewtonReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  PebbleHillParkReservoir  |Location:  PebbleHillParkReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  SunnysideReservoir  |Location:  SunnysideReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  GrandviewReservoir  |Location:  GrandviewReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  ClaytonTankReservoir  |Location:  ClaytonTankReservoirLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterStorageTankModel   |ObjectName:  MapleRidgeReservor  |Location:  MapleRidgeReservorLocation  |FillLevel:  WaterStorageTankFillLevel  |MaxCapacity:  5000  |FacilityType:  OnGroundConcreteAnchored  |WaterSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+RWaterLiftStationModel   |ObjectName:  GreenwoodPumpStation  |Location: GreenwoodPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  CapilanoPumpStation  |Location: CapilanoPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  SasmatPumStation  |Location: SasmatPumStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  LittleMountainPumpStation  |Location: LittleMountainPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  KerslandPumpStation  |Location: KerslandPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  VancouverHeightsPumpStation  |Location: VancouverHeightsPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  CentralParkPumpStation  |Location: CentralParkPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  BurnabyMountainPumpStation  |Location: BurnabyMountainPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  WestburncoPumpingStation  |Location: WestburncoPumpingStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  CapeHornPumpStation  |Location: CapeHornPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  HellingsPumpStation  |Location: HellingsPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  NewtonBoosterPumpStation  |Location: NewtonBoosterPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  PebbleHillParkPumpStation  |Location: PebbleHillParkPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  GrandviewPumpStation  |Location: GrandviewPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterLiftStationModel   |ObjectName:  MahonPumpStation  |Location: MahonPumpStationLocation  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+RWaterTreatmentFacilityModel   |ObjectName:  SeymourCapilanoFiltrationPlant  |Location:  SeymourCapilanoFiltrationPlantLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  StanleyParkRechlorificationStation  |Location:  StanleyParkRechlorificationStationLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  CoquitlamTreatmentPlant  |Location:  CoquitlamTreatmentPlantLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  LittleMountainTreatmentFacility  |Location:  LittleMountainTreatmentFacilityLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  VancouverHeightsTreatmentFacility  |Location:  VancouverHeightsTreatmentFacilityLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  KerslandTreatmentFacility  |Location:  KerslandTreatmentFacilityLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  CapeHornTreatmentFacility  |Location:  CapeHornTreatmentFacilityLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  HaneyMain3TreatmentFacility  |Location:  HaneyMain3TreatmentFacilityLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RWaterTreatmentFacilityModel   |ObjectName:  NewtonBoosterTreatmentFacility  |Location:  NewtonBoosterTreatmentFacilityLocation  |FacilityType:  PWT5  |WaterSupplierList:    |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// POWER SUPPLY
+RPowerSubstationModel   |ObjectName:  SperlingSubstation  |Location:  SperlingSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  CamosunSubstation  |Location:  CamosunSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  GeorgeDickieSubstation  |Location:  GeorgeDickieSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MountPleasantSubstation  |Location:  MountPleasantSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  Kidd1Substation  |Location:  Kidd1SubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MainwaringSubstation  |Location:  MainwaringSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  DalGrauerSubstation  |Location:  DalGrauerSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  MurrinSubstation  |Location:  MurrinSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  HastingsEastRectifierStation  |Location:  HastingsEastRectifierStationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  GrandviewSubstation  |Location:  GrandviewSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  PetroCanadaSubstation  |Location:  PetroCanadaSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  BernardSubstation  |Location:  BernardSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  HillAvenueTerminalStation  |Location:  HillAvenueTerminalStationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  Royal2Substation  |Location:  Royal2SubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  BigBendSubstation  |Location:  BigBendSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  WhalleySubstation  |Location:  WhalleySubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  IngledowSubstation  |Location:  IngledowSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  FleetwoodSubstation  |Location:  FleetwoodSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  Kidd2Substation  |Location:  Kidd2SubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerSubstationModel   |ObjectName:  CapilanoSubstation  |Location:  CapilanoSubstationLocation  |FacilityType:  MediumVoltageUnanchored  |PowerSupplierList:    |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+RPowerDamModel   |ObjectName:  BuntzenLakeDam  |Location:  BuntzenLakeDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  73  |YearBuilt:  1951  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  AlouetteLake  |Location:  AlouetteLakeLocation  |FacilityType:  SmallUnanchored   |Capacity:  9  |YearBuilt:  1928  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  StaveFallsDam  |Location:  StaveFallsDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  91  |YearBuilt:  1912  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  RuskinDam  |Location:  RuskinDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  105  |YearBuilt:  1930  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  WahleachFallsDam  |Location:  WahleachFallsDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  63  |YearBuilt:  1952  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  WhatshanDam  |Location:  WhatshanDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  54  |YearBuilt:  1972  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  PingstonCreekDam  |Location:  PingstonCreekDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  45  |YearBuilt:  2003  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  RevelstokeDam  |Location:  RevelstokeDamLocation  |FacilityType:  LargeUnanchored   |Capacity:  2480  |YearBuilt:  1984  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  MicaDamDam  |Location:  MicaDamDamLocation  |FacilityType:  LargeUnanchored   |Capacity:  2800  |YearBuilt:  1976  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  SetonPowerhouseDam  |Location:  SetonPowerhouseDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  48  |YearBuilt:  1956  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  WaldenNorthDam  |Location:  WaldenNorthDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  18  |YearBuilt:  1993  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  BridgeRiverPowerProjectDam  |Location:  BridgeRiverPowerProjectDamLocation  |FacilityType:  LargeUnanchored   |Capacity:  478  |YearBuilt:  1948  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  LajoieDam  |Location:  LajoieDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  25  |YearBuilt:  1957  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  SooRiverDam  |Location:  SooRiverDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  14  |YearBuilt:  1994  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  CheakamusDam  |Location:  CheakamusDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  158  |YearBuilt:  1957  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  UpperClownhornDam  |Location:  UpperClownhornDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  11  |YearBuilt:  2009  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  ClownhornDam  |Location:  ClownhornDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  33  |YearBuilt:  1957  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  SecheltCreekDam  |Location:  SecheltCreekDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  17  |YearBuilt:  1997  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  FurryCreekDam  |Location:  FurryCreekDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  11  |YearBuilt:  2004  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  LoisLakeDam  |Location:  LoisLakeDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  37.4  |YearBuilt:  1930  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  EastTobaDam  |Location:  EastTobaDamLocation  |FacilityType:  SmallUnanchored   |Capacity:  123  |YearBuilt:  2010  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+RPowerDamModel   |ObjectName:  MontroseCreek  |Location:  MontroseCreekLocation  |FacilityType:  SmallUnanchored   |Capacity:  73  |YearBuilt:  2010  |IntensityList:  CrustalIntensityModelResponse ; PGDIntensityModelResponse  |OutputLevel:  Minimum
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// FUEL NETWORK
+RRefineryModel       |ObjectName: BurnabyChevronRefinery        |Location: BurnabyChevronLocation     |FacilityType: SmallUnanchored          |StorageCapacity: 171000.0  |FuelSupplierList:      |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse   |OutputLevel: Minimum
+RRefineryModel       |ObjectName: AnacortesShellRefinery        |Location: AnacortesShellLocation     |FacilityType: SmallUnanchored          |StorageCapacity: 4730000   |FuelSupplierList:      |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse   |OutputLevel: Minimum
+RGenericFuelSourceModel  |ObjectName: BurnabyShellTerminal      |Location: BurnabyShellLocation       |FacilityType: OnGroundSteelUnanchored  |StorageCapacity: 199500.0  |FuelSupplierList:      |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse   |OutputLevel: Minimum
+RGenericFuelSourceModel  |ObjectName: BurnabyEssoTerminal       |Location: BurnabyEssoLocation        |FacilityType: OnGroundSteelUnanchored  |StorageCapacity: 124500.0  |FuelSupplierList:      |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse   |OutputLevel: Minimum
+RGenericFuelSourceModel  |ObjectName: BurnabySuncorTerminal     |Location: BurnabySuncorLocation      |FacilityType: OnGroundSteelUnanchored  |StorageCapacity: 96000.0   |FuelSupplierList:      |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse   |OutputLevel: Minimum
+RGenericFuelSourceModel  |ObjectName: WestridgeMarineTerminal   |Location: BurnabyWestridgeLocation   |FacilityType: OnGroundSteelUnanchored  |StorageCapacity: 45000.0   |FuelSupplierList:      |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse   |OutputLevel: Minimum
+
+RFuelTankFarmModel   |ObjectName: CobbleHillChevronTankFarm  |Location: CobbleHillChevronTankFarmLocation   |FacilityType: OnGroundConcreteUnanchored |FillLevel: GenericFillLevel   |MaxCapacity: 74919.0  |NumberOfStorageTanks: 4    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: NanaimoSuncorTankFarm      |Location: NanaimoSuncorTankFarmLocation       |FacilityType: OnGroundSteelUnanchored    |FillLevel: GenericFillLevel   |MaxCapacity: 64956.0  |NumberOfStorageTanks: 4    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: NanaimoEssoTankFarm        |Location: NanaimoEssoTankFarmLocation         |FacilityType: OnGroundSteelUnanchored    |FillLevel: GenericFillLevel   |MaxCapacity: 58315.0  |NumberOfStorageTanks: 4    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: ChemainusShellTankFarm     |Location: ChemainusShellTankFarmLocation      |FacilityType: OnGroundConcreteUnanchored |FillLevel: GenericFillLevel   |MaxCapacity: 80183.0  |NumberOfStorageTanks: 5    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: PowellRiverTankFarm        |Location: PowellRiverTankFarmLocation         |FacilityType: OnGroundConcreteUnanchored |FillLevel: GenericFillLevel   |MaxCapacity: 5412.0   |NumberOfStorageTanks: 4    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: BellaCoolaTankFarm         |Location: BellaCoolaTankFarmLocation          |FacilityType: OnGroundConcreteUnanchored |FillLevel: GenericFillLevel   |MaxCapacity: 6720.0   |NumberOfStorageTanks: 1    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: HartleyBayTankFarm         |Location: HartleyBayTankFarmLocation          |FacilityType: OnGroundConcreteUnanchored |FillLevel: GenericFillLevel   |MaxCapacity: 12996.0  |NumberOfStorageTanks: 1    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+RFuelTankFarmModel   |ObjectName: YVRAirportTankFarm         |Location: YVRTankFarmLocation                 |FacilityType: OnGroundConcreteUnanchored |FillLevel: GenericFillLevel   |MaxCapacity: 90000.0  |NumberOfStorageTanks: 4    |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ; PGDIntensityModelResponse    |OutputLevel: Minimum
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// TRANSPORTATION NETWORK
+RBridgeModel |ObjectName:  AlexFraserBridge         |Location: AlexFraserBridgeLocation          |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 5 |AngleOfSkew: 0 |BridgeLength: 930.5   |SpanWidth: 186.10  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ; |OutputLevel: Minimum
+RBridgeModel |ObjectName:  AnnacisChannelEastBridge |Location: AnnacisChannelEastBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  AnnacisChannelWestBridge |Location: AnnacisChannelWestBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  KnightStreetBridge       |Location: KnightStreetBridgeLocation        |AnalysisType: GroundShaking |BridgeType: HWB20 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1450.0  |SpanWidth: 1450.00 |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  MasseyTunnel             |Location: MasseyTunnelLocation              |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  OakStreetBridge          |Location: OakStreetBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB16 |NumberOfSpans: 3 |AngleOfSkew: 0 |BridgeLength: 213.2   |SpanWidth: 71.07   |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  PatulloBridge            |Location: PatulloBridgeLocation             |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1221.0  |SpanWidth: 1221.00 |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  QueensboroughBridge      |Location: QueensboroughBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 924.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  SecondNarrowsBridge      |Location: SecondNarrowsBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1000.0  |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  LionsGateBridge          |Location: LionsGateBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// PORTS
+RPortModel |ObjectName: BurnabyChevronPort    |Location: BurnabyChevronPortLocation   |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BurnabyShellPort      |Location: BurnabyShellPortLocation     |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BurnabyEssoPort       |Location: BurnabyEssoPortLocation      |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BurnabySuncorPort     |Location: BurnabySuncorPortLocation    |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:     |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: MitchellIslandPort    |Location: MitchellIslandPortLocation   |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: AnacortesShellPort    |Location: AnacortesShellLocation       |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BellaCoolaPort           |Location: BellaCoolaPortLocation              |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: HartleyBayPort           |Location: HartleyBayPortLocation              |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: PowellRiverPort          |Location: PowellRiverPortLocation             |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: ChemainusPort            |Location: ChemainusPortLocation               |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: CobbleHillPort           |Location: CobbleHillPortLocation              |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: NanaimoDepartureBayPort  |Location: NanaimoDepartureBayPortLocation     |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: AnchoredNoBackUpPower   |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: WestridgeMarinePort      |Location: BurnabyWestridgePortLocation        |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: AnchoredNoBackUpPower   |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+
+
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkOrchestratingModel   |InputParameterList: KerslandReservoirResponse |OutputLevel: Minimum
+RScenarioModel             |ObjectName: ScenarioModel               |InputParameterList:  NetworkOrchestratingModelResponse ;     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 2.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RNetworkSamplingModel |ObjectName: theSamplingModel  |VariableOfInterest: EconomicWelfare |InputParameterList: ScenarioModelResponse |ProbabilityTransformation: myProbTransformation  |MaxSamples: 3  |PlotInterval: 1  |RandomNumberGenerator: myGenerator |OutputLevel: Minimum
+

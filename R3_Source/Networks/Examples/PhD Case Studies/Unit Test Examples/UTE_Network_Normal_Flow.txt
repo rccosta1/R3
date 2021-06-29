@@ -1,0 +1,136 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2016-06-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2016-06-30 3:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// FUEL LEVEL IN THE TANK FARMS
+RContinuousRandomVariable |ObjectName: ShellFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+RContinuousRandomVariable |ObjectName: EssoFillLevel               |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+RContinuousRandomVariable |ObjectName: BurnabyFillLevel            |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+RContinuousRandomVariable |ObjectName: PRFillLevel                 |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+
+
+// -------------------------------------------------------------------------------------------------------
+// NETWORK LOCATIONS
+RLocation |ObjectName: BurnabyEssoLocation               |Latitude: 49.301006 |Longitude: -122.881862 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyShellLocation              |Latitude: 49.260704 |Longitude: -122.927543 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyTMPLTerminalLocation       |Latitude: 49.266605 |Longitude: -122.931305 |ShearWaveVelocity: 400.00
+
+RLocation |ObjectName: PowellRiverLocation               |Latitude: 49.866667    |Longitude: -124.549722 |ShearWaveVelocity: 400.00
+
+RLocation |ObjectName: BurnabyEssoPortLocation           |Latitude: 49.301006 |Longitude: -122.888862 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyShellPortLocation          |Latitude: 49.290704 |Longitude: -122.927543 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MitchellIslandPortLocation        |Latitude: 49.200830 |Longitude: -123.090998 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PowellRiverPortLocation           |Latitude: 49.866667 |Longitude: -124.549722 |ShearWaveVelocity: 400.00
+
+RLocation |ObjectName: PowellRiverTankFarmLocation       |Latitude: 49.835707 |Longitude: -124.528626 |ShearWaveVelocity: 400.00
+
+RLocation |ObjectName: AlexFraserBridgeLocation          |Latitude: 49.159273 |Longitude: -122.942560 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AnnacisChannelEastBridgeLocation  |Latitude: 49.175795 |Longitude: -122.955502 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AnnacisChannelWestBridgeLocation  |Latitude: 49.174547 |Longitude: -122.958101 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: ArthurLaingBridgeLocation         |Latitude: 49.197978 |Longitude: -123.135993 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: DinsmoreBridgeLocation            |Latitude: 49.178716 |Longitude: -123.148803 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: KnightStreetBridgeLocation        |Latitude: 49.201737 |Longitude: -123.077427 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MasseyTunnelLocation              |Latitude: 49.122216 |Longitude: -123.075997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MorayBridgeLocation               |Latitude: 49.191704 |Longitude: -123.136830 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: No2RdBridgeLocation               |Latitude: 49.175932 |Longitude: -123.157129 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: OakStreetBridgeLocation           |Latitude: 49.199864 |Longitude: -123.125585 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PatulloBridgeLocation             |Latitude: 49.207522 |Longitude: -122.894362 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PortMannBridgeLocation            |Latitude: 49.220069 |Longitude: -122.813288 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: QueensboroughBridgeLocation       |Latitude: 49.196191 |Longitude: -122.946997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: SecondNarrowsBridgeLocation       |Latitude: 49.296479 |Longitude: -123.026460 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: LionsGateBridgeLocation           |Latitude: 49.315292 |Longitude: -123.138606 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurrardInletLocation              |Latitude: 49.314647 |Longitude: -123.136675 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: TMJLocation                       |Latitude: 49.196191 |Longitude: -122.946997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: SaskatchewanLocation              |Latitude: 50.447193 |Longitude: -104.637517 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AlbertaLocation                   |Latitude: 53.501470 |Longitude: -113.542762 |ShearWaveVelocity: 400.00
+
+
+// -------------------------------------------------------------------------------------------------------
+// REFINERIES AND FUEL TERMINALS
+RGenericFuelSourceModel  |ObjectName: BurnabyEssoTerminal       |Location: BurnabyEssoLocation        |FacilityType: OnGroundSteelUnanchored  |StorageCapacity: 124500.0  |FuelSupplierList:         |IntensityList:      |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TRUCKS AND PIPELINES ON THIS SIDE
+RTruckModel  |ObjectName: BurnabyEssoToMitchellIslandPortTruck        |Location:  BurnabyEssoLocation    |TravelTime: 0.5    |FuelSupplierList: BurnabyEssoTerminalResponse       |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// PORTS NEAR VANCOUVER
+RPortModel |ObjectName: MitchellIslandPort    |Location: MitchellIslandPortLocation   |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:  BurnabyEssoToMitchellIslandPortTruckResponse   |IntensityList:        |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// SHIPS
+RShipModel |ObjectName: CTMitchellIslandPortToPowellRiverPortShip          |Location: MitchellIslandPortLocation  |ShipCapacity: 2706.0   |TravelTime: 0.25  |FuelSupplierList: MitchellIslandPortResponse  |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// PORTS ON THE OTHER SIDE
+RPortModel |ObjectName: PowellRiverPort          |Location: PowellRiverPortLocation             |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList: CTMitchellIslandPortToPowellRiverPortShipResponse ;                                                                   |IntensityList:       |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TRUCKS ON THE OTHER SIDE
+RTruckModel  |ObjectName: PowellRiverPortToPowellRiverTankFarmTruck                       |Location: PowellRiverPortLocation  |TravelTime: 0.5  |FuelSupplierList: PowellRiverPortResponse         |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TANK FARM
+RFuelTankFarmModel |ObjectName: PowellRiverTankFarm        |Location: PowellRiverTankFarmLocation         |FacilityType: OnGroundConcreteUnanchored |FillLevel: PRFillLevel                 |MaxCapacity: 5442.0   |NumberOfStorageTanks: 4         |FuelSupplierList:  PowellRiverPortToPowellRiverTankFarmTruckResponse               |IntensityList:       |OutputLevel: Maximum
+
+
+// -------------------------------------------------------------------------------------------------------
+// COMMUNITY
+RCommunityModel |ObjectName: PowellRiver        |Location: PowellRiverLocation   |DailyDemand: 902.0    |Contracts:   |FuelSupplierList: PowellRiverTankFarmResponse         |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// BRIDGES IN VANCOUVER
+RBridgeModel |ObjectName:  AlexFraserBridge         |Location: AlexFraserBridgeLocation          |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 5 |AngleOfSkew: 0 |BridgeLength: 930.5   |SpanWidth: 186.10  |SaIntensityList:   |PGDIntensityList:   |OutputLevel: Minimum
+RBridgeModel |ObjectName:  AnnacisChannelEastBridge |Location: AnnacisChannelEastBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  AnnacisChannelWestBridge |Location: AnnacisChannelWestBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  KnightStreetBridge       |Location: KnightStreetBridgeLocation        |AnalysisType: GroundShaking |BridgeType: HWB20 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1450.0  |SpanWidth: 1450.00 |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  MasseyTunnel             |Location: MasseyTunnelLocation              |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  OakStreetBridge          |Location: OakStreetBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB16 |NumberOfSpans: 3 |AngleOfSkew: 0 |BridgeLength: 213.2   |SpanWidth: 71.07   |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  PatulloBridge            |Location: PatulloBridgeLocation             |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1221.0  |SpanWidth: 1221.00 |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  QueensboroughBridge      |Location: QueensboroughBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 924.0   |SpanWidth: 924.00  |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  SecondNarrowsBridge      |Location: SecondNarrowsBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1000.0  |SpanWidth: 924.00  |SaIntensityList:   |PGDIntensityList:
+RBridgeModel |ObjectName:  LionsGateBridge          |Location: LionsGateBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList:   |PGDIntensityList:
+
+
+// -------------------------------------------------------------------------------------------------------
+// ON LAND ROUTES
+RRoute |ObjectName: BurnabyEssoToMitchellIslandPortViaRoute1    |FromLocation: BurnabyEssoLocation    |ToLocation: MitchellIslandPortLocation |Bridges: OakStreetBridgeDamageFactorResponse ;                                                                                      |ActualDistance: 32
+RRoute |ObjectName: BurnabyEssoToMitchellIslandPortViaRoute2    |FromLocation: BurnabyEssoLocation    |ToLocation: MitchellIslandPortLocation |Bridges: KnightStreetBridgeDamageFactorResponse ;                                                                                   |ActualDistance: 24
+RRoute |ObjectName: BurnabyEssoToMitchellIslandPortViaRoute3    |FromLocation: BurnabyEssoLocation    |ToLocation: MitchellIslandPortLocation |Bridges: QueensboroughBridgeDamageFactorResponse ;                                                                                  |ActualDistance: 26
+RRoute |ObjectName: BurnabyEssoToMitchellIslandPortViaRoute4    |FromLocation: BurnabyEssoLocation    |ToLocation: MitchellIslandPortLocation |Bridges: PatulloBridgeDamageFactorResponse ; AlexFraserBridgeDamageFactorResponse ; AnnacisChannelEastBridgeDamageFactorResponse ;  |ActualDistance: 32
+RRoute |ObjectName: BurnabyEssoToMitchellIslandPortViaRoute5    |FromLocation: BurnabyEssoLocation    |ToLocation: MitchellIslandPortLocation |Bridges: PatulloBridgeDamageFactorResponse ; AlexFraserBridgeDamageFactorResponse ; AnnacisChannelWestBridgeDamageFactorResponse ;  |ActualDistance: 32
+RRoute |ObjectName: BurnabyEssoToMitchellIslandPortViaRoute6    |FromLocation: BurnabyEssoLocation    |ToLocation: MitchellIslandPortLocation |Bridges: PatulloBridgeDamageFactorResponse ; MasseyTunnelDamageFactorResponse ;                                                     |ActualDistance: 34
+
+RRoute |ObjectName: PowellRiverPortToPowellRiverTankFarmRoute   |FromLocation: PowellRiverPortLocation         |ToLocation: PowellRiverTankFarmLocation          |Bridges:    |ActualDistance: 10
+
+
+// -------------------------------------------------------------------------------------------------------
+// MARITIME ROUTES
+RRoute |ObjectName: MitchellIslandPortToPowellRiverPortRoute             |FromLocation: MitchellIslandPortLocation      |ToLocation: PowellRiverPortLocation          |Channels:   |ActualDistance: 10
+
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkModel    |InputParameterList:  PowellRiverContinuousResponse  |OutputLevel: Minimum
+RScenarioModel             |ObjectName: ScenarioModel   |InputParameterList:  NetworkModelResponse   |StartTime: startTime   |EndTime: endTime  |MaxTimeGap: 0.25  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RSamplingModel |ObjectName: theSamplingModel |OutputLevel: Minimum  |InputParameter: ScenarioModelResponse |Threshold: 1.0 |ProbabilityTransformation: myProbTransformation |TargetCov: 0.02 |MaxSamples: 1002 |PlotInterval: 1 |RandomNumberGenerator: myGenerator

@@ -1,0 +1,184 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2010-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2010-01-05 6:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2010-01-05 4:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: MMin               |CurrentValue: 5.0
+RConstant            |ObjectName: CrustalDepth       |CurrentValue: 0
+RConstant            |ObjectName: SubcrustalDepth    |CurrentValue: 5
+RConstant            |ObjectName: FixedPeriod        |CurrentValue: 1.0
+RConstant            |ObjectName: MaxMagnitude       |CurrentValue: 7.0
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+
+// Given Magnitude
+RLocation |ObjectName: M73EarthquakeLocation |Latitude: 49.27266143 |Longitude: -123.409919
+
+RGivenMagnitudeModel  |ObjectName: theGivenMagnitudeModel  |Magnitude: 7.3 |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+
+
+
+//Cascade Mountains - CASR
+RLocation |ObjectName: CASR_Point01 |Latitude: 51.900 |Longitude: -123.600
+RLocation |ObjectName: CASR_Point02 |Latitude: 51.200 |Longitude: -122.000
+RLocation |ObjectName: CASR_Point03 |Latitude: 48.700 |Longitude: -120.000
+RLocation |ObjectName: CASR_Point04 |Latitude: 47.000 |Longitude: -120.000
+RLocation |ObjectName: CASR_Point05 |Latitude: 47.000 |Longitude: -124.030
+RLocation |ObjectName: CASR_Point06 |Latitude: 47.560 |Longitude: -123.900
+RLocation |ObjectName: CASR_Point07 |Latitude: 48.030 |Longitude: -124.230
+RLocation |ObjectName: CASR_Point08 |Latitude: 49.540 |Longitude: -126.710
+RLocation |ObjectName: CASR_Point09 |Latitude: 49.740 |Longitude: -126.400
+RLocation |ObjectName: CASR_Point10 |Latitude: 49.910 |Longitude: -126.710
+
+RPolygonalAreaSourceModel |ObjectName: CASRLocationModel |BoundaryLocationList:  CASR_Point01 ; CASR_Point02 ; CASR_Point03 ; CASR_Point04 ; CASR_Point05 ; CASR_Point06 ; CASR_Point07 ; CASR_Point08 ; CASR_Point09 ; CASR_Point10 ;  |Depth: CrustalDepth  |OutputLevel: Minimum
+RConstant |ObjectName: CASRMmax |CurrentValue: 7.7000
+RContinuousRandomVariable |ObjectName: CASRBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.015 |StandardDeviation: 0.37760
+RBoundedExponentialMagnitudeModel |ObjectName: CASRMagnitudeModel |MinimumMagnitude: MMin |MaximumMagnitude: CASRMmax |Beta: CASRBeta |Occurrence: earthquakeOccurrenceModelResponse |OutputLevel: Minimum
+
+
+//Georgia Strait (deep) - GSP
+RLocation |ObjectName: GSP_Point01 |Latitude: 49.550 |Longitude: -123.850
+RLocation |ObjectName: GSP_Point02 |Latitude: 48.840 |Longitude: -122.400
+RLocation |ObjectName: GSP_Point03 |Latitude: 48.300 |Longitude: -121.720
+RLocation |ObjectName: GSP_Point04 |Latitude: 47.680 |Longitude: -121.500
+RLocation |ObjectName: GSP_Point05 |Latitude: 47.000 |Longitude: -121.700
+RLocation |ObjectName: GSP_Point06 |Latitude: 47.000 |Longitude: -123.300
+RLocation |ObjectName: GSP_Point07 |Latitude: 47.530 |Longitude: -123.220
+RLocation |ObjectName: GSP_Point08 |Latitude: 47.870 |Longitude: -123.350
+RLocation |ObjectName: GSP_Point09 |Latitude: 48.250 |Longitude: -123.830
+RLocation |ObjectName: GSP_Point10 |Latitude: 48.850 |Longitude: -124.750
+
+RPolygonalAreaSourceModel |ObjectName: GSPLocationModel |OutputLevel: Maximum |BoundaryLocationList:  GSP_Point01 ; GSP_Point02 ; GSP_Point03 ; GSP_Point04 ; GSP_Point05 ; GSP_Point06 ; GSP_Point07 ; GSP_Point08 ; GSP_Point09 ; GSP_Point10 ;  |Depth: SubcrustalDepth
+RContinuousRandomVariable |ObjectName: GSPMmax |DistributionType: Lognormal (zeta, sigma) |Mean: 7.0600 |StandardDeviation: 0.12000
+RContinuousRandomVariable |ObjectName: GSPBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.128 |StandardDeviation: 0.07640
+RBoundedExponentialMagnitudeModel |ObjectName: GSPMagnitudeModel |OutputLevel: Maximum |MinimumMagnitude: MMin |MaximumMagnitude: GSPMmax |Beta: GSPBeta |Occurrence: earthquakeOccurrenceModelResponse
+
+
+//Juan de Fuca (offshore) - JDFF
+RLocation |ObjectName: JDFF_Point01 |Latitude: 49.540 |Longitude: -126.710
+RLocation |ObjectName: JDFF_Point02 |Latitude: 48.030 |Longitude: -124.230
+RLocation |ObjectName: JDFF_Point03 |Latitude: 47.560 |Longitude: -123.900
+RLocation |ObjectName: JDFF_Point04 |Latitude: 47.000 |Longitude: -124.030
+RLocation |ObjectName: JDFF_Point05 |Latitude: 47.000 |Longitude: -124.900
+RLocation |ObjectName: JDFF_Point06 |Latitude: 47.380 |Longitude: -124.920
+RLocation |ObjectName: JDFF_Point07 |Latitude: 48.320 |Longitude: -125.800
+RLocation |ObjectName: JDFF_Point08 |Latitude: 49.240 |Longitude: -127.180
+
+RPolygonalAreaSourceModel |ObjectName: JDFFLocationModel |OutputLevel: Maximum |BoundaryLocationList:  JDFF_Point01 ; JDFF_Point02 ; JDFF_Point03 ; JDFF_Point04 ; JDFF_Point05 ; JDFF_Point06 ; JDFF_Point07 ; JDFF_Point08  ;  |Depth: CrustalDepth
+RContinuousRandomVariable |ObjectName: JDFFMmax |DistributionType: Lognormal (zeta, sigma) |Mean: 6.9400 |StandardDeviation: 0.18000
+RContinuousRandomVariable |ObjectName: JDFFBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.870 |StandardDeviation: 0.22060
+RBoundedExponentialMagnitudeModel |ObjectName: JDFFMagnitudeModel |OutputLevel: Maximum |MinimumMagnitude: MMin |MaximumMagnitude: JDFFMmax |Beta: JDFFBeta |Occurrence: earthquakeOccurrenceModelResponse
+
+
+//Juan the Fuca (onshore) - JDFN
+RLocation |ObjectName:	JDFN_Point01 |Latitude: 49.74 |Longitude: -126.4
+RLocation |ObjectName:	JDFN_Point02 |Latitude: 48.85 |Longitude: -124.75
+RLocation |ObjectName:	JDFN_Point03 |Latitude: 48.25 |Longitude: -123.83
+RLocation |ObjectName:	JDFN_Point04 |Latitude: 47.87 |Longitude: -123.35
+RLocation |ObjectName:	JDFN_Point05 |Latitude: 47.53 |Longitude: -123.22
+RLocation |ObjectName:	JDFN_Point06 |Latitude: 47.00 |Longitude: -123.3
+RLocation |ObjectName:	JDFN_Point07 |Latitude: 47.00 |Longitude: -124.03
+RLocation |ObjectName:	JDFN_Point08 |Latitude: 47.56 |Longitude: -123.9
+RLocation |ObjectName:	JDFN_Point09 |Latitude: 48.03 |Longitude: -124.23
+RLocation |ObjectName:	JDFN_Point10 |Latitude: 49.54 |Longitude: -126.71
+
+RPolygonalAreaSourceModel |ObjectName: JDFNLocationModel |OutputLevel: Minimum |BoundaryLocationList:  JDFN_Point01 ; JDFN_Point02 ; JDFN_Point03 ; JDFN_Point04 ; JDFN_Point05 ; JDFN_Point06 ; JDFN_Point07 ; JDFN_Point08 ; JDFN_Point09 ; JDFN_Point10 |Depth: CrustalDepth
+RContinuousRandomVariable |ObjectName: JDFNMmax |DistributionType: Lognormal (zeta, sigma) |Mean: 7.0000 |StandardDeviation: 0.20494
+RContinuousRandomVariable |ObjectName: JDFNBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 2.070 |StandardDeviation: 0.28850
+RBoundedExponentialMagnitudeModel |ObjectName: JDFNMagnitudeModel |OutputLevel: Minimum |MinimumMagnitude: MMin |MaximumMagnitude: JDFNMmax |Beta: JDFNBeta |Occurrence: earthquakeOccurrenceModelResponse
+
+
+//Brooks Peninsula - BRO
+RLocation |ObjectName: BRO_Point01 |Latitude: 50.330 |Longitude: -127.740
+RLocation |ObjectName: BRO_Point02 |Latitude: 50.150 |Longitude: -127.300
+RLocation |ObjectName: BRO_Point03 |Latitude: 49.980 |Longitude: -127.630
+RLocation |ObjectName: BRO_Point04 |Latitude: 50.180 |Longitude: -128.000
+
+RPolygonalAreaSourceModel |ObjectName: BROLocationModel |OutputLevel: Minimum |BoundaryLocationList:  BRO_Point01 ; BRO_Point02 ; BRO_Point03 ; BRO_Point04           |Depth: CrustalDepth
+RContinuousRandomVariable |ObjectName: BROMmax |DistributionType: Lognormal (zeta, sigma) |Mean: 6.9400 |StandardDeviation: 0.18000
+RContinuousRandomVariable |ObjectName: BROBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.192 |StandardDeviation: 0.14990
+RBoundedExponentialMagnitudeModel |ObjectName: BROMagnitudeModel |OutputLevel: Minimum |MinimumMagnitude: MMin |MaximumMagnitude: BROMmax |Beta: BROBeta |Occurrence: earthquakeOccurrenceModelResponse
+
+
+// AREA SOURCE - NOFR
+RLocation |ObjectName: NOFR_Point01 |Latitude: 50.07 |Longitude: -127.09
+RLocation |ObjectName: NOFR_Point02 |Latitude: 49.91 |Longitude: -126.71
+RLocation |ObjectName: NOFR_Point03 |Latitude: 49.74 |Longitude: -126.4
+RLocation |ObjectName: NOFR_Point04 |Latitude: 48.76 |Longitude: -127.93
+RLocation |ObjectName: NOFR_Point05 |Latitude: 49.15 |Longitude: -128.5
+
+RPolygonalAreaSourceModel |ObjectName: NOFRLocationModel |OutputLevel: Minimum |BoundaryLocationList:  NOFR_Point01 ; NOFR_Point02 ; NOFR_Point03 ; NOFR_Point04 ; NOFR_Point05 |Depth: CrustalDepth
+RContinuousRandomVariable |ObjectName: NOFRMmax |DistributionType: Lognormal (zeta, sigma) |Mean: 6.9400 |StandardDeviation: 0.18000
+RContinuousRandomVariable |ObjectName: NOFRBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.570 |StandardDeviation: 0.06790
+RBoundedExponentialMagnitudeModel |ObjectName: NOFRMagnitudeModel |OutputLevel: Minimum |MinimumMagnitude: MMin |MaximumMagnitude: NOFRMmax |Beta: NOFRBeta |Occurrence: earthquakeOccurrenceModelResponse
+
+
+// AREA SOURCE - CST
+RLocation |ObjectName: CST_Point01|Latitude: 58.700 |Longitude: -136.800
+RLocation |ObjectName: CST_Point02|Latitude: 60.000 |Longitude: -135.100
+RLocation |ObjectName: CST_Point03|Latitude: 58.000 |Longitude: -132.150
+RLocation |ObjectName: CST_Point04|Latitude: 56.000 |Longitude: -130.000
+RLocation |ObjectName: CST_Point05|Latitude: 53.100 |Longitude: -127.100
+RLocation |ObjectName: CST_Point06|Latitude: 51.900 |Longitude: -123.600
+RLocation |ObjectName: CST_Point07|Latitude: 49.910 |Longitude: -126.710
+RLocation |ObjectName: CST_Point08|Latitude: 51.500 |Longitude: -130.600
+RLocation |ObjectName: CST_Point09|Latitude: 51.950 |Longitude: -131.180
+RLocation |ObjectName: CST_Point10|Latitude: 52.600 |Longitude: -129.700
+RLocation |ObjectName: CST_Point11|Latitude: 54.400 |Longitude: -131.500
+RLocation |ObjectName: CST_Point12|Latitude: 54.500 |Longitude: -133.480
+
+RPolygonalAreaSourceModel |ObjectName: CSTLocationModel |OutputLevel: Minimum |BoundaryLocationList:  CST_Point01 ; CST_Point02 ; CST_Point03 ; CST_Point04 ; CST_Point05 ; CST_Point06 ; CST_Point07 ; CST_Point08 ; CST_Point09 ; CST_Point10 ; CST_Point11 ; CST_Point12   |Depth: CrustalDepth
+RContinuousRandomVariable |ObjectName: CSTMmax |DistributionType: Lognormal (zeta, sigma) |Mean: 7.4800 |StandardDeviation: 0.06000
+RContinuousRandomVariable |ObjectName: CSTBeta |DistributionType: Lognormal (zeta, sigma) |Mean: 1.498 |StandardDeviation: 0.11600
+RBoundedExponentialMagnitudeModel |ObjectName: CSTMagnitudeModel |OutputLevel: Minimum |MinimumMagnitude: MMin |MaximumMagnitude: CSTMmax |Beta: CSTBeta |Occurrence: earthquakeOccurrenceModelResponse
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: CrustalIntensityModel  |MagnitudeList: CASRMagnitudeModelResponse ; GSPMagnitudeModelResponse  |HypocentreList: CASRLocationModelResponse ; GSPLocationModelResponse |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+
+// -------------------------------------------------------------------------------------------------------
+// BUILDING LOCATION
+RLocation |ObjectName: VancouverLocation |Latitude: 49.263438 |Longitude: -123.246357
+
+
+// -------------------------------------------------------------------------------------------------------
+// BUILDING MODELS
+RSimpleBuildingResponseModel     |ObjectName: theBuildingResponseModel  |Location:  VancouverLocation   |Sa:  CrustalIntensityModelResponse   |BuildingType: C2  |CodeDesignLevel:  High  |NumberOfStories: 10
+RSimpleBuildingDamageModel       |ObjectName: theBuildingDamageModel    |Location:  VancouverLocation   |PeakDrift:  theBuildingResponseModelPeakDriftResponse   |PeakAcceleration:  theBuildingResponseModelPeakAccelerationResponse |ResidualDrift:  theBuildingResponseModelResidualDriftRatioResponse  |BuildingType: C2  |CodeDesignLevel:  High  |NumberOfStories: 10
+RSimpleBuildingLossModel         |ObjectName: theBuildingLossModel      |StructuralDamage:  theBuildingDamageModelStructuralDamageRatioResponse   |NSDriftDamage:  theBuildingDamageModelNonstructuralDriftDamageRatioResponse  |NSAccelerationDamage:  theBuildingDamageModelNonstructuralAccelerationDamageRatioResponse  |ContentDamageRatios: theBuildingDamageModelContentDamageRatioResponse  |BuildingValue:  3000000.0  |BuildingOccupancyClass: RES3
+
+
+// -------------------------------------------------------------------------------------------------------
+// SCENARIO MODEL
+RScenarioModel |ObjectName: ScenarioModel  |InputParameterList:  theBuildingLossModelTotalLossResponse ;     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 2.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RSamplingModel |ObjectName: theSamplingModel |OutputLevel: Maximum  |InputParameter: ScenarioModelResponse |Threshold: 1.0 |ProbabilityTransformation: myProbTransformation |TargetCov: 0.02 |MaxSamples: 200 |PlotInterval: 1 |RandomNumberGenerator: myGenerator
+
+

@@ -1,0 +1,150 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2016-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2016-03-15 6:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2016-01-10 4:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// CONSTANTS
+RConstant            |ObjectName: MMin               |CurrentValue: 5.0
+RConstant            |ObjectName: CrustalDepth       |CurrentValue: 0
+RConstant            |ObjectName: SubcrustalDepth    |CurrentValue: 5
+RConstant            |ObjectName: FixedPeriod        |CurrentValue: 1.0
+RConstant            |ObjectName: ConstantMagnitude  |CurrentValue: 7.0
+
+
+// -------------------------------------------------------------------------------------------------------
+// FILL LEVEL IN THE STORAGE TANKS
+RContinuousRandomVariable |ObjectName: PercentageFull   |DistributionType: Uniform (a, b)          |Mean: 0.635    |StandardDeviation: 0.2141
+RContinuousRandomVariable |ObjectName: WaterStorageTankFillLevel              |DistributionType: Uniform (a, b)          |Mean: 0.75    |StandardDeviation: 0.14434
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+RLocation |ObjectName: Area_Source_P1_Location |Latitude: 49.4902348081828 |Longitude: -123.769084408967
+RLocation |ObjectName: Area_Source_P2_Location |Latitude: 49.4902348081828 |Longitude: -123.356115950463
+RLocation |ObjectName: Area_Source_P3_Location |Latitude: 48.900502140467 |Longitude: -123.35307126188
+RLocation |ObjectName: Area_Source_P4_Location |Latitude: 48.9005030448388 |Longitude: -123.770995203436
+RPolygonalAreaSourceModel |ObjectName: EQLocationModel |BoundaryLocationList:  Area_Source_P1_Location ; Area_Source_P2_Location ; Area_Source_P3_Location ; Area_Source_P4_Location ; |Depth: CrustalDepth  |OutputLevel: Minimum
+
+
+RContinuousRandomVariable          |ObjectName: CASRBeta  |DistributionType: Lognormal (zeta, sigma)  |Mean: 1.0  |StandardDeviation:  0.3
+//RBoundedExponentialMagnitudeModel  |ObjectName: theMagnitudeModel  |MinimumMagnitude: MMin  |MaximumMagnitude: ConstantMagnitude  |Beta: CASRBeta  |Occurrence: earthquakeOccurrenceModelResponse |OutputLevel: Minimum
+
+RGivenMagnitudeModel  |ObjectName: theMagnitudeModel  |Magnitude: 6.0  |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: CrustalIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+
+// PGD INTENSITY MODEL
+RPGDIntensityModel  |ObjectName: PGDIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  | PeakGroundAcceleration: CrustalIntensityModelResponse
+
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+
+
+RLocation |ObjectName: EQ_Location |Latitude: 49.304413 |Longitude: -123.156837
+RLocation |ObjectName: AlexFraserBridgeLocation         |Latitude: 49.159273 |Longitude: -122.942560 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AnnacisChannelEastBridgeLocation |Latitude: 49.175795 |Longitude: -122.955502 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: AnnacisChannelWestBridgeLocation |Latitude: 49.174547 |Longitude: -122.958101 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: ArthurLaingBridgeLocation        |Latitude: 49.197978 |Longitude: -123.135993 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: DinsmoreBridgeLocation           |Latitude: 49.178716 |Longitude: -123.148803 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: KnightStreetBridgeLocation       |Latitude: 49.201737 |Longitude: -123.077427 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MasseyTunnelLocation             |Latitude: 49.122216 |Longitude: -123.075997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MorayBridgeLocation              |Latitude: 49.191704 |Longitude: -123.136830 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: No2RdBridgeLocation              |Latitude: 49.175932 |Longitude: -123.157129 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: OakStreetBridgeLocation          |Latitude: 49.199864 |Longitude: -123.125585 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PatulloBridgeLocation            |Latitude: 49.207522 |Longitude: -122.894362 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PortMannBridgeLocation           |Latitude: 49.220069 |Longitude: -122.813288 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: QueensboroughBridgeLocation      |Latitude: 49.196191 |Longitude: -122.946997 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: SecondNarrowsBridgeLocation      |Latitude: 49.296479 |Longitude: -123.026460 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: LionsGateBridgeLocation          |Latitude: 49.315292 |Longitude: -123.138606 |ShearWaveVelocity: 400.00
+
+RLocation |ObjectName: AnacortesPortLocation           |Latitude: 48.521696 |Longitude: -122.612732 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyChevronPortLocation      |Latitude: 49.289735 |Longitude: -123.002872 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyEssoPortLocation         |Latitude: 49.301006 |Longitude: -122.888862 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyShellPortLocation        |Latitude: 49.290704 |Longitude: -122.927543 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabySuncorPortLocation       |Latitude: 49.288933 |Longitude: -122.880849 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: ChemainusPortLocation           |Latitude: 48.928496 |Longitude: -123.704482 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: CobbleHillPortLocation          |Latitude: 48.696939 |Longitude: -123.540638 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: MitchellIslandPortLocation      |Latitude: 49.200830 |Longitude: -123.090998 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: NanaimoDepartureBayPortLocation |Latitude: 49.166667 |Longitude: -123.933056 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: PowellRiverPortLocation         |Latitude: 49.866667 |Longitude: -124.549722 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: HartleyBayPortLocation          |Latitude: 53.424485 |Longitude: -129.251227 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BellaCoolaPortLocation          |Latitude: 52.372665 |Longitude: -126.752583 |ShearWaveVelocity: 400.00
+RLocation |ObjectName: BurnabyWestridgePortLocation    |Latitude: 49.289072 |Longitude: -122.954368 |ShearWaveVelocity: 400.00
+
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// BRIDGES
+RBridgeModel |ObjectName:  AlexFraserBridge         |Location: AlexFraserBridgeLocation          |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 5 |AngleOfSkew: 0 |BridgeLength: 930.5   |SpanWidth: 186.10  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ; |OutputLevel: Minimum
+RBridgeModel |ObjectName:  AnnacisChannelEastBridge |Location: AnnacisChannelEastBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  AnnacisChannelWestBridge |Location: AnnacisChannelWestBridgeLocation  |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  KnightStreetBridge       |Location: KnightStreetBridgeLocation        |AnalysisType: GroundShaking |BridgeType: HWB20 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1450.0  |SpanWidth: 1450.00 |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  MasseyTunnel             |Location: MasseyTunnelLocation              |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 100.0   |SpanWidth: 100.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  OakStreetBridge          |Location: OakStreetBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB16 |NumberOfSpans: 3 |AngleOfSkew: 0 |BridgeLength: 213.2   |SpanWidth: 71.07   |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  PatulloBridge            |Location: PatulloBridgeLocation             |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1221.0  |SpanWidth: 1221.00 |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  QueensboroughBridge      |Location: QueensboroughBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB15 |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 924.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+
+RBridgeModel |ObjectName:  SecondNarrowsBridge      |Location: SecondNarrowsBridgeLocation       |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 1000.0  |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  LionsGateBridge          |Location: LionsGateBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  ArthurLaingBridge        |Location: ArthurLaingBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+
+RBridgeModel |ObjectName:  DinsmoreBridge     |Location: DinsmoreBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  MorayBridge        |Location: MorayBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  No2RdBridge        |Location: No2RdBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+RBridgeModel |ObjectName:  PortMannBridge     |Location: PortMannBridgeLocation           |AnalysisType: GroundShaking |BridgeType: HWB1  |NumberOfSpans: 1 |AngleOfSkew: 0 |BridgeLength: 850.0   |SpanWidth: 924.00  |SaIntensityList: CrustalIntensityModelResponse ; |PGDIntensityList: PGDIntensityModelResponse ;
+
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// PORTS
+RPortModel |ObjectName: BurnabyChevronPort    |Location: BurnabyChevronPortLocation   |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BurnabyShellPort      |Location: BurnabyShellPortLocation     |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BurnabyEssoPort       |Location: BurnabyEssoPortLocation      |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BurnabySuncorPort     |Location: BurnabySuncorPortLocation    |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: FFNoDamage |FuelSupplierList:     |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: MitchellIslandPort    |Location: MitchellIslandPortLocation   |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: AnacortesShellPort    |Location: AnacortesShellLocation       |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:   |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse    |OutputLevel: Minimum
+RPortModel |ObjectName: BellaCoolaPort           |Location: BellaCoolaPortLocation              |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: HartleyBayPort           |Location: HartleyBayPortLocation              |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: PowellRiverPort          |Location: PowellRiverPortLocation             |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: ChemainusPort            |Location: ChemainusPortLocation               |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: CobbleHillPort           |Location: CobbleHillPortLocation              |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: UnanchoredNoBackUpPower |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: NanaimoDepartureBayPort  |Location: NanaimoDepartureBayPortLocation     |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: AnchoredNoBackUpPower   |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+RPortModel |ObjectName: WestridgeMarinePort      |Location: BurnabyWestridgePortLocation        |WFStructureType: WFStructure  |CranesType: CrNoDamage  |FuelFacilityType: AnchoredNoBackUpPower   |FuelSupplierList:    |IntensityList: CrustalIntensityModelResponse ;  PGDIntensityModelResponse   |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RNetworkManagerModel       |ObjectName: NetworkOrchestratingModel   |InputParameterList:  |OutputLevel: Minimum
+RScenarioModel             |ObjectName: ScenarioModel               |InputParameterList:  NetworkOrchestratingModelResponse ;     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 2.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOLS FOR SAMPLING
+RInHouseProbabilityDistributions         |ObjectName: theProbDist
+RIndependenceProbabilityTransformation   |ObjectName: myProbTransformation |ProbabilityDistributions: theProbDist |OutputLevel: Minimum
+RInHouseRandomNumberGenerator            |ObjectName: myGenerator
+
+
+
+// -------------------------------------------------------------------------------------------------------
+// SAMPLING MODEL
+RNetworkSamplingModel |ObjectName: theSamplingModel  |VariableOfInterest: EconomicWelfare |InputParameterList: ScenarioModelResponse |ProbabilityTransformation: myProbTransformation  |MaxSamples: 3  |PlotInterval: 1  |RandomNumberGenerator: myGenerator |OutputLevel: Minimum
+

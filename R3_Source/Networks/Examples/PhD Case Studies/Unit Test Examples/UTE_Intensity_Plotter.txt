@@ -1,0 +1,38 @@
+// NETWORK RUN TIMES
+RTime |ObjectName: startTime        |Time: 2010-01-01 3:00:00.000
+RTime |ObjectName: endTime          |Time: 2010-01-01 3:00:00.000
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE OCCURRENCE TIME
+RTime |ObjectName: earthquakeOccurrenceTime          |Time: 2010-01-01 3:00:00.000
+RFixedTimeOccurrenceModel |ObjectName: earthquakeOccurrenceModel |OccurrenceTime: earthquakeOccurrenceTime
+
+
+// -------------------------------------------------------------------------------------------------------
+// EARTHQUAKE
+RContinuousRandomVariable          |ObjectName: CASRBeta  |DistributionType: Lognormal (zeta, sigma)  |Mean: 1.0  |StandardDeviation:  0.3
+RGivenMagnitudeModel  |ObjectName: theMagnitudeModel  |Magnitude: 7.3 |Occurrence: earthquakeOccurrenceModelResponse  |OutputLevel: Minimum
+
+
+// -------------------------------------------------------------------------------------------------------
+// TOOL FOR INTENSITY MODELS
+RInHouseLinearSolver |ObjectName: theLinearSolver
+
+
+// PGA INTENSITY (use this if the earthquake is shallow)
+RBooreAtkinson2008IntensityModel  |ObjectName: CrustalIntensityModel  |MagnitudeList: theMagnitudeModelResponse;   |HypocentreList: EQ_Location ;  |FaultType: Unspecified  |LinearSolver: theLinearSolver
+
+
+// -------------------------------------------------------------------------------------------------------
+// LOCATIONS
+RLocation |ObjectName: EQ_Location |Latitude: 49.27266143 |Longitude: -123.409919
+RLocation |ObjectName: theBuildingLocation |Latitude: 49.263481 |Longitude: -123.199992
+//RLocation |ObjectName: theBuildingLocation |Latitude: 49.221310 |Longitude: -123.036829
+
+
+// -------------------------------------------------------------------------------------------------------
+//ORCHESTRATING MODEL
+RIntensitySpectrumPlotterModel    |ObjectName: thePlotter  |IntensityList: CrustalIntensityModelResponse   |BuildingLocation:  theBuildingLocation
+RScenarioModel             |ObjectName: ScenarioModel               |InputParameterList:  thePlotterResponse     |StartTime: startTime |EndTime: endTime  |MaxTimeGap: 2.0  |RealInterestRate: 1.0 |OutputLevel: Minimum
+
